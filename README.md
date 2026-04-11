@@ -1,62 +1,36 @@
-# 🚀 Autoport Frontend
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Autoport 프로젝트의 프론트엔드 레포지토리입니다.
+## Getting Started
 
----
+First, run the development server:
 
-## 🛠 기술 스택
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-### 📌 프레임워크
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- **React**
-  - 컴포넌트 기반 개발 → 재사용성 및 유지보수성 향상
-  - 풍부한 생태계로 협업 및 확장성에 유리
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-- **Next.js**
-  - React 기반 풀스택 프레임워크
-  - 파일 기반 라우팅 지원 → 빠른 개발 가능
-  - SSR 지원 → SEO 최적화에 유리
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
----
+## Learn More
 
-### 📌 언어
+To learn more about Next.js, take a look at the following resources:
 
-- **TypeScript**
-  - 정적 타입 지원 → 컴파일 단계에서 오류 검출
-  - 대규모 프로젝트에서 유지보수성 향상
-  - React와의 높은 호환성
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
----
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### 📌 스타일링
+## Deploy on Vercel
 
-- **Tailwind CSS**
-  - 유틸리티 클래스 기반 → 빠른 UI 개발
-  - 일관된 디자인 유지 가능
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-> styled-components는 JS 파일 크기 증가로 인한 성능 저하 우려로 인해 사용하지 않음
-
----
-
-### 📌 패키지 매니저
-
-- **pnpm**
-  - 빠른 설치 속도
-  - 효율적인 디스크 사용
-  - 엄격한 의존성 관리로 충돌 방지
-
----
-
-### 📌 UI 컴포넌트
-
-- **shadcn/ui**
-  - Tailwind 기반 UI 컴포넌트
-  - 높은 커스터마이징 자유도
-
----
-
-### 📌 배포
-
-- **Vercel**
-  - Next.js 최적화 배포 플랫폼
-  - 간편한 배포 및 자동 CI/CD 지원
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
