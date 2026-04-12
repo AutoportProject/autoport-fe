@@ -1,3 +1,10 @@
+---
+name: ✨ Feature Request
+about: 기능 추가 요청
+title: "[feat] "
+labels: feat
+---
+
 ## ✨ Feature:
 
 <!-- 기능 이름 -->
@@ -6,15 +13,11 @@
 
 ## 📝 설명
 
--
-
----
+- ***
 
 ## 🎯 목표
 
--
-
----
+- ***
 
 ## 📋 작업 항목
 
