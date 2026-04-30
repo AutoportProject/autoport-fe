@@ -48,9 +48,10 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* --- 2. 폰트 설정 (Pretendard 연결) --- */
+  /* --- 2. 폰트 설정 --- */
   --font-pretendard: var(--font-pretendard);
   --font-sans: var(--font-pretendard);
+  --font-archivo-black: var(--font-archivo-black);
 
   /* --- 3. Typography Tokens --- */
   /* Title 계열 */
@@ -60,7 +61,7 @@
 
   /* Body 계열 */
   --text-body-lg: 20px;
-  --text-body-md: 20px; /* Medium과 SemiBold 구분은 font-weight로! */
+  --text-body-md: 20px;
 
   /* Caption 계열 */
   --text-caption-lg: 20px;
@@ -94,7 +95,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 0.4375rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);

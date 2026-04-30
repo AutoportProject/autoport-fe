@@ -7,7 +7,6 @@ import Header from '@/components/layout/Header'
 export default function EmailSignupForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
-  const [verifyCode, setVerifyCode] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
@@ -26,16 +25,9 @@ export default function EmailSignupForm() {
               className="border rounded-md px-3 py-2 w-full"
             />
             <button className="bg-blue-500 text-white px-3 py-2 rounded-md whitespace-nowrap">
-              인증
+              인증번호 전송
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="인증번호"
-            value={verifyCode}
-            onChange={(e) => setVerifyCode(e.target.value)}
-            className="border rounded-md px-3 py-2 w-full"
-          />
           <input
             type="password"
             placeholder="비밀번호"
@@ -54,7 +46,7 @@ export default function EmailSignupForm() {
             onClick={() => router.push('/signup/info')}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
           >
-            다음
+            다음으로
           </button>
         </div>
       </div>

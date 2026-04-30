@@ -17,7 +17,7 @@ export default function AdditionalInfoForm() {
         <div className="flex flex-col gap-4 w-80">
           <input
             type="text"
-            placeholder="닉네임 (포트폴리오 이름)"
+            placeholder="닉네임"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="border rounded-md px-3 py-2 w-full"
