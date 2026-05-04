@@ -3,12 +3,44 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/layout/Header'
+import { sendVerificationEmail } from '@/lib/api/auth'
 
 export default function EmailSignupForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [codeSent, setCodeSent] = useState(false)
+  const [codeVerified, setCodeVerified] = useState(false)
+
+  const handleSendCode = async () => {
+    await sendVerificationEmail(email)
+    setCodeSent(true)
+    alert('인증번호가 전송되었습니다!')
+  }
+
+  const handleVerifyCode = () => {
+    if (code.length > 0) {
+      setCodeVerified(true)
+      alert('인증번호가 확인되었습니다!')
+    } else {
+      alert('인증번호를 입력해주세요!')
+    }
+  }
+
+  const handleNext = () => {
+    if (!codeVerified) {
+      alert('이메일 인증을 완료해주세요!')
+      return
+    }
+    if (password !== passwordConfirm) {
+      alert('비밀번호가 일치하지 않습니다!')
+      return
+    }
+    sessionStorage.setItem('signupData', JSON.stringify({ email, password, code }))
+    router.push('/signup/info')
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -24,10 +56,30 @@ export default function EmailSignupForm() {
               onChange={(e) => setEmail(e.target.value)}
               className="border rounded-md px-3 py-2 w-full"
             />
-            <button className="bg-blue-500 text-white px-3 py-2 rounded-md whitespace-nowrap">
+            <button
+              onClick={handleSendCode}
+              className="bg-blue-500 text-white px-3 py-2 rounded-md whitespace-nowrap"
+            >
               인증번호 전송
             </button>
           </div>
+          {codeSent && (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="인증번호"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="border rounded-md px-3 py-2 w-full"
+              />
+              <button
+                onClick={handleVerifyCode}
+                className="bg-blue-500 text-white px-3 py-2 rounded-md whitespace-nowrap"
+              >
+                확인
+              </button>
+            </div>
+          )}
           <input
             type="password"
             placeholder="비밀번호"
@@ -43,7 +95,7 @@ export default function EmailSignupForm() {
             className="border rounded-md px-3 py-2 w-full"
           />
           <button
-            onClick={() => router.push('/signup/info')}
+            onClick={handleNext}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
           >
             다음으로

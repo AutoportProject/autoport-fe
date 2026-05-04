@@ -3,11 +3,22 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/layout/Header'
+import { localLogin } from '@/lib/api/auth'
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const handleLogin = async () => {
+    const res = await localLogin({ email, password })
+    if (res.success) {
+      localStorage.setItem('accessToken', res.data.accessToken)
+      router.push('/')
+    } else {
+      alert('이메일 또는 비밀번호가 올바르지 않습니다!')
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -30,7 +41,7 @@ export default function LoginPage() {
             className="border rounded-md px-3 py-2 w-full"
           />
           <button
-            onClick={() => router.push('/')}
+            onClick={handleLogin}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
           >
             로그인

@@ -1,7 +1,7 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 
 export const sendVerificationEmail = async (email: string) => {
-  const res = await fetch(`${BASE_URL}/api/auth/email/send`, {
+  const res = await fetch(`${API_BASE_URL}/api/auth/email/send`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
@@ -14,8 +14,9 @@ export const emailSignup = async (data: {
   password: string
   name: string
   bio: string
+  code: string
 }) => {
-  const res = await fetch(`${BASE_URL}/api/auth/signup`, {
+  const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -27,7 +28,7 @@ export const localLogin = async (data: {
   email: string
   password: string
 }) => {
-  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+  const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -40,7 +41,7 @@ export const oauthSignup = async (data: {
   name: string
   bio: string
 }) => {
-  const res = await fetch(`${BASE_URL}/api/auth/github/signup`, {
+  const res = await fetch(`${API_BASE_URL}/api/auth/github/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
