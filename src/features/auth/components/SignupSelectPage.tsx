@@ -1,17 +1,15 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Header from '@/components/layout/Header'
 
 export default function SignupSelectPage() {
   const router = useRouter()
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <div className="flex flex-col items-center justify-center flex-1">
         <h1 className="title-bold mb-8">회원가입</h1>
-        <div className="flex flex-col gap-4 w-80">
+        <section className="flex flex-col gap-4 w-80">
           <button
             onClick={() => router.push('/signup/email')}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
@@ -27,7 +25,7 @@ export default function SignupSelectPage() {
             </svg>
             GitHub 계정으로 회원가입
           </button>
-        </div>
+        </section>
       </div>
     </div>
   )

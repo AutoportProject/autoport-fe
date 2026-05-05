@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import Header from '@/components/layout/Header'
 import Image from 'next/image'
 
 export default function SignupComplete() {
@@ -9,7 +8,6 @@ export default function SignupComplete() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <div className="flex flex-col items-center justify-center flex-1 gap-4">
         <h1 className="title-bold">회원가입이 완료되었습니다!</h1>
         <Image src="/octopus.svg" alt="완료" width={400} height={400} />

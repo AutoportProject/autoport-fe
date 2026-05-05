@@ -2,15 +2,16 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Header from '@/components/layout/Header'
 import { localLogin } from '@/lib/api/auth'
+import FormInput from '@/components/ui/FormInput'
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
     const res = await localLogin({ email, password })
     if (res.success) {
       localStorage.setItem('accessToken', res.data.accessToken)
@@ -20,34 +21,37 @@ export default function LoginPage() {
     }
   }
 
+  const handleGithubLogin = () => {
+    // GitHub OAuth 연동 후 구현 예정
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <div className="flex flex-col items-center justify-center flex-1">
         <h1 className="title-bold mb-8">로그인</h1>
         <div className="flex flex-col gap-4 w-80">
-          <input
-            type="email"
-            placeholder="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border rounded-md px-3 py-2 w-full"
-          />
-          <input
-            type="password"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border rounded-md px-3 py-2 w-full"
-          />
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <FormInput
+              type="email"
+              placeholder="이메일"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <FormInput
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-3 rounded-md body-m"
+            >
+              로그인
+            </button>
+          </form>
           <button
-            onClick={handleLogin}
-            className="bg-blue-500 text-white py-3 rounded-md body-m"
-          >
-            로그인
-          </button>
-          <button
-            onClick={() => router.push('/signup/github')}
+            onClick={handleGithubLogin}
             className="bg-gray-800 text-white py-3 rounded-md body-m flex items-center justify-center gap-2"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
