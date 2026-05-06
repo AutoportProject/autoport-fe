@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const REDIRECT_URI = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/github/callback`
@@ -14,7 +14,7 @@ async function githubLogin(code: string) {
   return res.json()
 }
 
-export default function GithubCallbackPage() {
+function GithubCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -45,5 +45,13 @@ export default function GithubCallbackPage() {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <p className="body-m">로그인 중...</p>
     </div>
+  )
+}
+
+export default function GithubCallbackPage() {
+  return (
+    <Suspense>
+      <GithubCallbackContent />
+    </Suspense>
   )
 }
