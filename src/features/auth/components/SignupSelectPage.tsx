@@ -1,9 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
 export default function SignupSelectPage() {
-  const router = useRouter()
+  const handleGithubAuth = () => {
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
+    const redirectUri = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/github/callback`
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user`
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -11,13 +13,13 @@ export default function SignupSelectPage() {
         <section className="flex flex-col gap-4 w-80">
           <h1 className="title-bold mb-8">회원가입</h1>
           <button
-            onClick={() => router.push('/signup/email')}
+            onClick={() => window.location.href = '/signup/email'}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
           >
             이메일로 회원가입
           </button>
           <button
-            onClick={() => router.push('/signup/github')}
+            onClick={handleGithubAuth}
             className="bg-gray-800 text-white py-3 rounded-md body-m flex items-center justify-center gap-2"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
