@@ -11,7 +11,7 @@ export default function SignupSelectPage() {
     <div className="flex flex-col min-h-screen">
       <div className="flex flex-col items-center justify-center flex-1">
         <section className="flex flex-col gap-4 w-80">
-          <h1 className="title-bold mb-8">회원가입</h1>
+          <h1 className="title-bold mb-8 text-center">회원가입</h1>
           <button
             onClick={() => window.location.href = '/signup/email'}
             className="bg-blue-500 text-white py-3 rounded-md body-m"
