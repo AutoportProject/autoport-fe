@@ -1,10 +1,8 @@
-import Header from '@/components/layout/Header'
 import Image from 'next/image'
 
 export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <div className="flex flex-col items-center justify-center flex-1 gap-6 px-10">
         <p className="text-center text-2xl font-bold leading-tight">
           나만의 <span className="text-blue-500">개발 스토리</span>를 담는{' '}
