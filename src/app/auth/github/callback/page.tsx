@@ -20,9 +20,10 @@ function GithubCallbackContent() {
     githubLogin({ code, redirectUri: REDIRECT_URI }).then((res) => {
       if (res.success) {
         if (res.data.isNewUser) {
-          sessionStorage.setItem('tempUserId', res.data.tempUserId)
+          sessionStorage.setItem('tempUserId', String(res.data.tempUserId))
           router.push('/signup/info')
         } else {
+          sessionStorage.removeItem('tempUserId')
           localStorage.setItem('accessToken', res.data.accessToken)
           router.push('/')
         }
@@ -34,8 +35,9 @@ function GithubCallbackContent() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <p className="body-m">로그인 중...</p>
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+      <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <p className="body-m">처리 중...</p>
     </div>
   )
 }
