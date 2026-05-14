@@ -21,7 +21,7 @@ function GithubCallbackContent() {
       if (res.success) {
         if (res.data.isNewUser) {
           sessionStorage.setItem('tempUserId', res.data.tempUserId)
-          router.push('/auth/github')
+          router.push('/signup/info')
         } else {
           localStorage.setItem('accessToken', res.data.accessToken)
           router.push('/')
