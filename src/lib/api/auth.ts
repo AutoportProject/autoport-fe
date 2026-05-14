@@ -37,7 +37,7 @@ export const localLogin = async (data: {
 }
 
 export const oauthSignup = async (data: {
-  tempUserId: string
+  tempUserId: number
   name: string
   bio: string
 }) => {

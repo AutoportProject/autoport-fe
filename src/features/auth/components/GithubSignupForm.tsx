@@ -18,7 +18,7 @@ export default function GithubSignupForm() {
       router.push('/signup')
       return
     }
-    const res = await oauthSignup({ tempUserId, name, bio })
+    const res = await oauthSignup({ tempUserId: Number(tempUserId), name, bio })
     if (res.success) {
       sessionStorage.removeItem('tempUserId')
       localStorage.setItem('accessToken', res.data.accessToken)
