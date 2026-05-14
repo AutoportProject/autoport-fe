@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { emailSignup } from '@/lib/api/auth'
+import { emailSignup, oauthSignup } from '@/lib/api/auth'
 import FormInput from '@/components/ui/FormInput'
 
 export default function AdditionalInfoForm() {
@@ -12,19 +12,35 @@ export default function AdditionalInfoForm() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    const saved = sessionStorage.getItem('signupData')
-    if (!saved) {
-      alert('다시 시도해주세요!')
-      router.push('/signup/email')
-      return
-    }
-    const { email, password, code } = JSON.parse(saved)
-    const res = await emailSignup({ email, password, name, bio, code })
-    if (res.success) {
-      sessionStorage.removeItem('signupData')
-      router.push('/signup/complete')
+
+    const tempUserId = sessionStorage.getItem('tempUserId')
+
+    if (tempUserId) {
+      // GitHub 회원가입
+      const res = await oauthSignup({ tempUserId: Number(tempUserId), name, bio })
+      if (res.success) {
+        sessionStorage.removeItem('tempUserId')
+        localStorage.setItem('accessToken', res.data.accessToken)
+        router.push('/signup/complete')
+      } else {
+        alert('회원가입에 실패했습니다!')
+      }
     } else {
-      alert('회원가입에 실패했습니다!')
+      // 일반 회원가입
+      const saved = sessionStorage.getItem('signupData')
+      if (!saved) {
+        alert('다시 시도해주세요!')
+        router.push('/signup/email')
+        return
+      }
+      const { email, password, code } = JSON.parse(saved)
+      const res = await emailSignup({ email, password, name, bio, code })
+      if (res.success) {
+        sessionStorage.removeItem('signupData')
+        router.push('/signup/complete')
+      } else {
+        alert('회원가입에 실패했습니다!')
+      }
     }
   }
 
