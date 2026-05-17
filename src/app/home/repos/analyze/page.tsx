@@ -140,7 +140,7 @@ const AnalyzePage = () => {
           포트폴리오 생성하기
         </button>
         <button
-          onClick={() => router.push('/home/repos')}
+          onClick={() => router.push('/home/repos/analyze/emphasis')}
           className="caption-m-sm text-neutral-400 underline underline-offset-4"
         >
           다른 레포지토리 선택
