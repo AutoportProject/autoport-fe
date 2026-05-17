@@ -34,7 +34,7 @@ const RootLayout = ({
         <div className="flex min-h-screen flex-col">
           <Header />
 
-          <main className="flex flex-1">
+          <main className="flex flex-1 items-center justify-center">
             {children}
           </main>
 
