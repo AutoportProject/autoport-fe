@@ -1,19 +1,8 @@
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import axiosInstance from '@/lib/api/axios'
-
-interface Repo {
-  repoId: number
-  name: string
-  fullName: string
-  htmlUrl: string
-  description: string | null
-  language: string | null
-  stargazersCount: number
-  forksCount: number
-  updatedAt: string
-  private: boolean
-}
+import { useRepoStore, Repo } from '@/store/repoStore'
 
 interface RepoResponse {
   success: boolean
@@ -27,9 +16,10 @@ interface RepoResponse {
 }
 
 export const useGithubRepos = () => {
-  const [repos, setRepos] = useState<Repo[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const setRepos = useRepoStore((state) => state.setRepos)
+  const router = useRouter()
 
   const fetchRepos = async () => {
     setIsLoading(true)
@@ -41,6 +31,7 @@ export const useGithubRepos = () => {
       })
 
       setRepos(data.data.content)
+      router.push('/home/repos')
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status
@@ -55,5 +46,5 @@ export const useGithubRepos = () => {
     }
   }
 
-  return { repos, isLoading, error, fetchRepos }
+  return { isLoading, error, fetchRepos }
 }
