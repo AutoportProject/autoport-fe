@@ -15,7 +15,7 @@ export default function LoginPage() {
     const res = await localLogin({ email, password })
     if (res.success) {
       localStorage.setItem('accessToken', res.data.accessToken)
-      router.push('/')
+      router.push('/home')
     } else {
       alert('이메일 또는 비밀번호가 올바르지 않습니다!')
     }
