@@ -134,13 +134,13 @@ const AnalyzePage = () => {
       {/* CTA */}
       <div className="flex w-full max-w-2xl flex-col items-center gap-3">
         <button
-          onClick={() => router.push('/next-step')} // 다음 step 경로 확정 시 수정
+          onClick={() => router.push('/home/repos/analyze/emphasis')}
           className="body-sb w-full rounded-2xl bg-neutral-900 py-5 text-white transition-all hover:bg-neutral-800"
         >
           포트폴리오 생성하기
         </button>
         <button
-          onClick={() => router.push('/home/repos/analyze/emphasis')}
+          onClick={() => router.push('/home/repos')}
           className="caption-m-sm text-neutral-400 underline underline-offset-4"
         >
           다른 레포지토리 선택
