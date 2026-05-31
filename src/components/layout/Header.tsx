@@ -18,7 +18,7 @@ export default function Header() {
 
   function handleLogout() {
     localStorage.clear()
-    router.push('/login')
+    router.push('/')
   }
 
   return (
