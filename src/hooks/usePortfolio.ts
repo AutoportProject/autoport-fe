@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
+  createPortfolio,
   fetchPortfolioList,
   fetchPortfolioDetail,
   updatePortfolio,
   deletePortfolio,
 } from '@/lib/api/portfolio'
 import type {
+  CreatePortfolioRequest,
   Portfolio,
   PortfolioListItem,
   UpdatePortfolioRequest,
@@ -22,7 +24,7 @@ export function usePortfolioList() {
     setError(null)
     try {
       const data = await fetchPortfolioList({ sort: 'updatedAt', direction: 'desc' })
-      setPortfolios(Array.isArray(data) ? data : (data as any).content ?? [])
+      setPortfolios(data.content)
     } catch (e) {
       setError(e instanceof Error ? e.message : '오류가 발생했습니다.')
     } finally {
@@ -35,6 +37,27 @@ export function usePortfolioList() {
   }, [load])
 
   return { portfolios, loading, error, refetch: load }
+}
+
+// 포트폴리오 생성
+export function useCreatePortfolio() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const create = useCallback(async (body: CreatePortfolioRequest) => {
+    setLoading(true)
+    setError(null)
+    try {
+      return await createPortfolio(body)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '저장에 실패했습니다.')
+      throw e
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  return { create, loading, error }
 }
 
 // 포트폴리오 상세 조회

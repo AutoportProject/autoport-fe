@@ -44,3 +44,27 @@ export interface UpdatePortfolioResponse {
   title: string
   updatedAt: string
 }
+
+export interface PortfolioListResponse {
+  content: PortfolioListItem[]
+  page: number
+  perPage: number
+  totalElements: number
+  totalPages: number
+}
+
+export interface CreatePortfolioRequest {
+  title: string
+  bio: string
+  templateId: number
+  projects: Project[]
+  featuredProjectId?: number
+  isPublic: boolean
+}
+
+export interface CreatePortfolioResponse {
+  portfolioId: number
+  title: string
+  createdAt: string
+  isPublic: boolean
+}
