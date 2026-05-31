@@ -1,6 +1,8 @@
 import type {
+  CreatePortfolioRequest,
+  CreatePortfolioResponse,
   Portfolio,
-  PortfolioListItem,
+  PortfolioListResponse,
   UpdatePortfolioRequest,
   UpdatePortfolioResponse,
 } from '@/types/portfolio'
@@ -11,13 +13,34 @@ function getToken() {
   return typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
 }
 
+// 포트폴리오 생성
+export const createPortfolio = async (
+  data: CreatePortfolioRequest
+): Promise<CreatePortfolioResponse> => {
+  const res = await fetch(`${API_BASE_URL}/api/portfolio`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  })
+
+  if (!res.ok) {
+    throw new Error('포트폴리오 저장에 실패했습니다.')
+  }
+
+  const json = await res.json()
+  return json.data
+}
+
 // 포트폴리오 목록 조회
 export const fetchPortfolioList = async (params?: {
   page?: number
   perPage?: number
   sort?: 'createdAt' | 'updatedAt'
   direction?: 'asc' | 'desc'
-}): Promise<PortfolioListItem[]> => {
+}): Promise<PortfolioListResponse> => {
   const query = new URLSearchParams()
   if (params?.page) query.set('page', String(params.page))
   if (params?.perPage) query.set('perPage', String(params.perPage))
@@ -30,7 +53,8 @@ export const fetchPortfolioList = async (params?: {
       Authorization: `Bearer ${getToken()}`,
     },
   })
-  return res.json()
+  const json = await res.json()
+  return json.data
 }
 
 // 포트폴리오 상세 조회
