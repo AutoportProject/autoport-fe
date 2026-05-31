@@ -3,6 +3,9 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import axiosInstance from '@/lib/api/axios'
 import { useRepoStore } from '@/store/repoStore'
+import { createPortfolio } from '@/lib/api/portfolio'
+import type { CreatePortfolioRequest } from '@/types/portfolio'
+import type { AnalyzeResult } from '@/store/repoStore'
 
 export interface PortfolioResult {
   portfolioTitle: string
@@ -23,6 +26,36 @@ export interface PortfolioResult {
   generatedAt: string
 }
 
+const DEFAULT_TEMPLATE_ID = 1
+
+const toDraftPortfolioRequest = (
+  result: PortfolioResult,
+  analyzeResult: AnalyzeResult
+): CreatePortfolioRequest => {
+  const fallbackProjectName = analyzeResult.aiInputData.projectName || analyzeResult.repoName
+  const fallbackDescription = analyzeResult.aiInputData.description || analyzeResult.description
+  const fallbackTechStacks = analyzeResult.aiInputData.stacks.length > 0
+    ? analyzeResult.aiInputData.stacks
+    : analyzeResult.techStacks
+
+  return {
+    title: result.portfolioTitle,
+    bio: result.introduction,
+    templateId: DEFAULT_TEMPLATE_ID,
+    featuredProjectId: analyzeResult.repoId,
+    isPublic: false,
+    projects: result.projects.map((project, index) => ({
+      repoId: analyzeResult.repoId,
+      name: project.name || fallbackProjectName,
+      description: project.description || project.oneLineDescription || fallbackDescription,
+      techStacks: project.techStacks.length > 0 ? project.techStacks : fallbackTechStacks,
+      highlights: project.highlights.length > 0 ? project.highlights : project.mainFeatures,
+      githubUrl: analyzeResult.aiInputData.repoUrl,
+      order: index + 1,
+    })),
+  }
+}
+
 export const useGeneratePortfolio = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -41,7 +74,10 @@ export const useGeneratePortfolio = () => {
         emphasis,
       })
 
-      setPortfolioResult(data.data)
+      const portfolioResult = data.data as PortfolioResult
+      await createPortfolio(toDraftPortfolioRequest(portfolioResult, analyzeResult))
+
+      setPortfolioResult(portfolioResult)
       router.push('/home/repos/analyze/portfolio')
     } catch (err) {
       if (axios.isAxiosError(err)) {
