@@ -56,7 +56,7 @@ export interface PortfolioListResponse {
 export interface CreatePortfolioRequest {
   title: string
   bio: string
-  templateId: number
+  templateId?: number
   projects: Project[]
   featuredProjectId?: number
   isPublic: boolean

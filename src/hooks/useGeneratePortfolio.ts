@@ -26,8 +26,6 @@ export interface PortfolioResult {
   generatedAt: string
 }
 
-const DEFAULT_TEMPLATE_ID = 1
-
 const toDraftPortfolioRequest = (
   result: PortfolioResult,
   analyzeResult: AnalyzeResult
@@ -41,7 +39,6 @@ const toDraftPortfolioRequest = (
   return {
     title: result.portfolioTitle,
     bio: result.introduction,
-    templateId: DEFAULT_TEMPLATE_ID,
     featuredProjectId: analyzeResult.repoId,
     isPublic: false,
     projects: result.projects.map((project, index) => ({
