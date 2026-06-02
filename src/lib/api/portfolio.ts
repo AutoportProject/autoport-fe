@@ -65,7 +65,8 @@ export const fetchPortfolioDetail = async (portfolioId: number): Promise<Portfol
       Authorization: `Bearer ${getToken()}`,
     },
   })
-  return res.json()
+  const json = await res.json()
+  return json.data  
 }
 
 // 포트폴리오 수정
