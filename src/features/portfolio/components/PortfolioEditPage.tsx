@@ -146,7 +146,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     setForm({
       title: portfolio.title ?? '',
       bio: portfolio.bio ?? '',
-      templateId: portfolio.templateId,
+      templateId: portfolio.templateId ?? 1,
       projects: portfolio.projects ?? [],
       public: portfolio.isPublic,
       featuredProjectId: portfolio.featuredProjectId,
@@ -306,6 +306,12 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
           className="body-sb w-full rounded-2xl bg-neutral-900 py-5 text-white transition-all hover:bg-neutral-800 disabled:opacity-50"
         >
           {saving ? '저장 중...' : '저장하기'}
+        </button>
+        <button
+          onClick={() => router.push('/portfolio')}
+          className="body-m w-full rounded-2xl border border-neutral-200 py-4 text-neutral-600 hover:bg-neutral-50 transition"
+        >
+          취소
         </button>
       </div>
     </div>
