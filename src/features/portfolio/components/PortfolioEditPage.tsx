@@ -44,13 +44,6 @@ function ProjectEditor({
           >
             {isFeatured ? '★ 대표' : '대표로 설정'}
           </button>
-          <button
-            type="button"
-            onClick={onRemove}
-            className="caption-m-sm rounded-full bg-red-50 px-3 py-1 text-red-400 hover:bg-red-100 transition"
-          >
-            삭제
-          </button>
         </div>
       </div>
 
@@ -146,7 +139,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     public: true,
     featuredProjectId: undefined,
   })
-  const [successMsg, setSuccessMsg] = useState('')
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   useEffect(() => {
     if (!portfolio) return
@@ -155,7 +148,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       bio: portfolio.bio ?? '',
       templateId: portfolio.templateId,
       projects: portfolio.projects ?? [],
-      public: portfolio.public,
+      public: portfolio.isPublic,
       featuredProjectId: portfolio.featuredProjectId,
     })
   }, [portfolio])
@@ -168,35 +161,19 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     })
   }
 
-  function removeProject(index: number) {
-    setForm((prev) => ({
-      ...prev,
-      projects: (prev.projects ?? []).filter((_, i) => i !== index),
-    }))
-  }
-
-  function addProject() {
-    const newProject: Project = {
-      repoId: Date.now(),
-      name: '',
-      description: '',
-      techStacks: [],
-      highlights: [],
-      githubUrl: '',
-      order: (form.projects ?? []).length + 1,
-    }
-    setForm((prev) => ({ ...prev, projects: [...(prev.projects ?? []), newProject] }))
+  function showToast(message: string, type: 'success' | 'error') {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 3000)
   }
 
   async function handleSubmit() {
     if (!form.title.trim()) {
-      alert('포트폴리오 제목을 입력해주세요.')
+      showToast('포트폴리오 제목을 입력해주세요.', 'error')
       return
     }
     try {
       await update(portfolioId, form)
-      setSuccessMsg('저장되었습니다!')
-      setTimeout(() => setSuccessMsg(''), 3000)
+      showToast('저장되었습니다!', 'success')
     } catch {
       // 에러는 훅에서 관리
     }
@@ -227,6 +204,15 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
 
   return (
     <div className="flex w-full flex-col items-center gap-10 px-6 py-12">
+      {/* 토스트 */}
+      {toast && (
+        <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 rounded-xl px-6 py-3 shadow-lg body-m ${
+          toast.type === 'success' ? 'bg-neutral-900 text-white' : 'bg-red-500 text-white'
+        }`}>
+          {toast.message}
+        </div>
+      )}
+
       {/* 헤더 */}
       <div className="flex w-full max-w-2xl flex-col gap-1">
         <button
@@ -282,22 +268,13 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
 
         {/* 프로젝트 목록 */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <span className="caption-m-sm text-neutral-400">
-              프로젝트 목록 {(form.projects ?? []).length}개
-            </span>
-            <button
-              type="button"
-              onClick={addProject}
-              className="caption-m-sm rounded-full border border-neutral-200 px-3 py-1 text-neutral-600 hover:bg-neutral-50 transition"
-            >
-              + 추가
-            </button>
-          </div>
+          <span className="caption-m-sm text-neutral-400">
+            프로젝트 목록 {(form.projects ?? []).length}개
+          </span>
 
           {(form.projects ?? []).length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-200 py-12">
-              <p className="body-m text-neutral-400">아직 프로젝트가 없어요. 추가해보세요!</p>
+              <p className="body-m text-neutral-400">프로젝트가 없어요.</p>
             </div>
           ) : (
             (form.projects ?? []).map((project, i) => (
@@ -306,7 +283,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
                 project={project}
                 index={i}
                 onChange={(updated) => updateProject(i, updated)}
-                onRemove={() => removeProject(i)}
+                onRemove={() => {}}
                 isFeatured={form.featuredProjectId === project.repoId}
                 onSetFeatured={() => setForm((p) => ({ ...p, featuredProjectId: project.repoId }))}
               />
@@ -321,12 +298,6 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
         </div>
       )}
 
-      {successMsg && (
-        <div className="w-full max-w-2xl rounded-xl bg-neutral-50 px-4 py-3">
-          <p className="body-m text-neutral-600">{successMsg}</p>
-        </div>
-      )}
-
       {/* 저장 버튼 */}
       <div className="flex w-full max-w-2xl flex-col gap-3">
         <button
@@ -335,12 +306,6 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
           className="body-sb w-full rounded-2xl bg-neutral-900 py-5 text-white transition-all hover:bg-neutral-800 disabled:opacity-50"
         >
           {saving ? '저장 중...' : '저장하기'}
-        </button>
-        <button
-          onClick={() => router.push('/portfolio')}
-          className="body-m w-full rounded-2xl border border-neutral-200 py-4 text-neutral-600 hover:bg-neutral-50 transition"
-        >
-          취소
         </button>
       </div>
     </div>
