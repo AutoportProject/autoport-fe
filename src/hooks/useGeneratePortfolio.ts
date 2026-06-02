@@ -56,7 +56,7 @@ const toDraftPortfolioRequest = (
 export const useGeneratePortfolio = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { analyzeResult, setPortfolioResult } = useRepoStore()
+  const { analyzeResult, setPortfolioResult, setSavedPortfolioId } = useRepoStore()
   const router = useRouter()
 
   const generate = async (emphasis: string, userName: string) => {
@@ -72,9 +72,10 @@ export const useGeneratePortfolio = () => {
       })
 
       const portfolioResult = data.data as PortfolioResult
-      await createPortfolio(toDraftPortfolioRequest(portfolioResult, analyzeResult))
+      const created = await createPortfolio(toDraftPortfolioRequest(portfolioResult, analyzeResult))
 
       setPortfolioResult(portfolioResult)
+      setSavedPortfolioId(created.portfolioId)
       router.push('/home/repos/analyze/portfolio')
     } catch (err) {
       if (axios.isAxiosError(err)) {

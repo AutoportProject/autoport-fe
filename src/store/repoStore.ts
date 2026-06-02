@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { PortfolioResult } from '@/hooks/useGeneratePortfolio'
+
 export interface Repo {
   repoId: number
   name: string
@@ -54,10 +55,12 @@ interface RepoStore {
   selectedRepo: Repo | null
   analyzeResult: AnalyzeResult | null
   portfolioResult: PortfolioResult | null
+  savedPortfolioId: number | null
   setRepos: (repos: Repo[]) => void
   setSelectedRepo: (repo: Repo) => void
   setAnalyzeResult: (result: AnalyzeResult) => void
   setPortfolioResult: (result: PortfolioResult) => void
+  setSavedPortfolioId: (id: number) => void
 }
 
 export const useRepoStore = create<RepoStore>((set) => ({
@@ -65,8 +68,10 @@ export const useRepoStore = create<RepoStore>((set) => ({
   selectedRepo: null,
   analyzeResult: null,
   portfolioResult: null,
+  savedPortfolioId: null,
   setRepos: (repos) => set({ repos }),
   setSelectedRepo: (repo) => set({ selectedRepo: repo }),
   setAnalyzeResult: (result) => set({ analyzeResult: result }),
   setPortfolioResult: (result) => set({ portfolioResult: result }),
+  setSavedPortfolioId: (id) => set({ savedPortfolioId: id }),
 }))
