@@ -14,6 +14,7 @@ export interface Portfolio {
   bio: string
   templateId: number
   public: boolean
+  isPublic: boolean
   featuredProjectId?: number
   projects: Project[]
   createdAt: string
