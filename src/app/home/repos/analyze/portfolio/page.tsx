@@ -4,7 +4,7 @@ import { useRepoStore } from '@/store/repoStore'
 import { useRouter } from 'next/navigation'
 
 const PortfolioPage = () => {
-  const { portfolioResult } = useRepoStore()
+  const { portfolioResult, savedPortfolioId } = useRepoStore()
   const router = useRouter()
 
   if (!portfolioResult) {
@@ -150,14 +150,22 @@ const PortfolioPage = () => {
       </div>
 
       {/* CTA */}
-      <div className="flex w-full max-w-2xl flex-col items-center gap-3">
+      <div className="flex w-full max-w-2xl flex-col gap-3">
+        {savedPortfolioId && (
         <button
-          onClick={() => router.push('/home')}
-          className="body-sb w-full rounded-2xl bg-neutral-900 py-5 text-white transition-all hover:bg-neutral-800"
+          onClick={() => router.push(`/portfolio/${savedPortfolioId}/edit`)}
+          className="body-sb w-full rounded-2xl border border-neutral-900 py-5 text-neutral-900 transition-all hover:bg-neutral-50"
         >
-          내 포트폴리오 보러가기
+          수정하기
         </button>
-      </div>
+      )}
+      <button
+        onClick={() => router.push('/home/my')}
+        className="body-sb w-full rounded-2xl bg-neutral-900 py-5 text-white transition-all hover:bg-neutral-800"
+      >
+        내 포트폴리오 보러가기
+      </button>
+    </div>
     </div>
   )
 }
