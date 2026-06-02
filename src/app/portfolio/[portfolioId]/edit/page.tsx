@@ -1,5 +1,6 @@
 import PortfolioEditPage from '@/features/portfolio/components/PortfolioEditPage'
 
-export default function Page({ params }: { params: { portfolioId: string } }) {
-  return <PortfolioEditPage portfolioId={Number(params.portfolioId)} />
+export default async function Page({ params }: { params: Promise<{ portfolioId: string }> }) {
+  const { portfolioId } = await params
+  return <PortfolioEditPage portfolioId={Number(portfolioId)} />
 }
