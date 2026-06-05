@@ -13,6 +13,8 @@ export interface Portfolio {
   portfolioId: number
   title: string
   bio: string
+  summary?: string
+  description?: string
   templateId: number
   isPublic: boolean
   featuredProjectId?: number
@@ -24,6 +26,8 @@ export interface Portfolio {
 export interface PortfolioListItem {
   portfolioId: number
   title: string
+  summary?: string
+  description?: string
   templateId: number
   isPublic: boolean
   featuredProjectName?: string
