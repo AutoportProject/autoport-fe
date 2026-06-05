@@ -146,7 +146,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     bio: '',
     templateId: 1,
     projects: [],
-    public: true,
+    isPublic: true,
     featuredProjectId: undefined,
   })
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
@@ -158,7 +158,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       bio: portfolio.bio ?? '',
       templateId: portfolio.templateId ?? 1,
       projects: portfolio.projects ?? [],
-      public: portfolio.isPublic,
+      isPublic: portfolio.isPublic,
       featuredProjectId: portfolio.featuredProjectId,
     })
   }, [portfolio])
@@ -265,14 +265,14 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={form.public ?? true}
-                onChange={(e) => setForm((p) => ({ ...p, public: e.target.checked }))}
+                checked={form.isPublic ?? true}
+                onChange={(e) => setForm((p) => ({ ...p, isPublic: e.target.checked }))}
                 className="sr-only peer"
               />
               <div className="w-10 h-6 bg-neutral-200 rounded-full peer peer-checked:bg-neutral-900 transition" />
               <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-4 shadow-sm" />
             </label>
-            <span className="body-m text-neutral-600">{form.public ? '공개' : '비공개'}</span>
+            <span className="body-m text-neutral-600">{form.isPublic ? '공개' : '비공개'}</span>
           </div>
         </div>
 
