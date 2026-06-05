@@ -80,6 +80,16 @@ function ProjectEditor({
         </div>
 
         <div>
+          <span className="caption-m-sm text-neutral-400">배포 링크</span>
+          <input
+            value={project.deployUrl ?? ''}
+            onChange={(e) => update('deployUrl', e.target.value)}
+            placeholder="https://your-project.vercel.app"
+            className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400"
+          />
+        </div>
+
+        <div>
           <span className="caption-m-sm text-neutral-400">
             기술 스택 <span className="text-neutral-300">(쉼표로 구분)</span>
           </span>
