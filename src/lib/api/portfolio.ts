@@ -53,6 +53,7 @@ export const fetchPortfolioList = async (params?: {
       Authorization: `Bearer ${getToken()}`,
     },
   })
+  if (!res.ok) throw new Error('포트폴리오 목록을 불러오는데 실패했습니다.')
   const json = await res.json()
   return json.data
 }
@@ -65,6 +66,7 @@ export const fetchPortfolioDetail = async (portfolioId: number): Promise<Portfol
       Authorization: `Bearer ${getToken()}`,
     },
   })
+  if (!res.ok) throw new Error('포트폴리오를 불러오는데 실패했습니다.')
   const json = await res.json()
   return json.data
 }
@@ -82,12 +84,13 @@ export const updatePortfolio = async (
     },
     body: JSON.stringify(data),
   })
+  if (!res.ok) throw new Error('포트폴리오 수정에 실패했습니다.')
   const json = await res.json()
   return json.data
 }
 
 // 포트폴리오 삭제
-export const deletePortfolio = async (portfolioId: number): Promise<{ message: string }> => {
+export const deletePortfolio = async (portfolioId: number): Promise<void> => {
   const res = await fetch(`${API_BASE_URL}/api/portfolio/${portfolioId}`, {
     method: 'DELETE',
     headers: {
@@ -95,5 +98,5 @@ export const deletePortfolio = async (portfolioId: number): Promise<{ message: s
       Authorization: `Bearer ${getToken()}`,
     },
   })
-  return res.json()
+  if (!res.ok) throw new Error('포트폴리오 삭제에 실패했습니다.')
 }

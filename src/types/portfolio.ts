@@ -5,6 +5,7 @@ export interface Project {
   techStacks?: string[]
   highlights?: string[]
   githubUrl?: string
+  deployUrl?: string
   order?: number
 }
 

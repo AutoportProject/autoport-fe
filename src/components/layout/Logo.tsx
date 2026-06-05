@@ -16,7 +16,7 @@ export default function Logo() {
 
   return (
     <Link href={isLoggedIn ? '/home' : '/'} className="flex items-center gap-2">
-      <Image src="/logo.svg" alt="로고" width={36} height={36} />
+      <Image src="/logo.svg" alt="로고" width={36} height={36} style={{ width: 'auto', height: '36px' }} />
       <span className="font-archivo-black tracking-[-0.05em] text-[#1C3154]">
         AutoPort
       </span>
