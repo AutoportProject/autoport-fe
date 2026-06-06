@@ -158,7 +158,6 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     bio: '',
     summary: '',
     description: '',
-    templateId: 1,
     projects: [],
     isPublic: true,
   })
@@ -172,7 +171,6 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       bio: portfolio.bio ?? '',
       summary: portfolio.summary ?? '',
       description: portfolio.description ?? '',
-      templateId: portfolio.templateId ?? 1,
       projects: portfolio.projects ?? [],
       isPublic: portfolio.isPublic,
     })
