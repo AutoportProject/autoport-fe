@@ -13,6 +13,7 @@ export interface Portfolio {
   portfolioId: number
   title: string
   bio: string
+  introduction?: string
   summary?: string
   description?: string
   templateId: number
