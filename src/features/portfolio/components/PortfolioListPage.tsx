@@ -6,10 +6,12 @@ import { usePortfolioList, useDeletePortfolio } from '@/hooks/usePortfolio'
 import type { PortfolioListItem } from '@/types/portfolio'
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ko-KR', {
+  return new Date(iso).toLocaleString('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
   })
 }
 
