@@ -200,6 +200,7 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
         ...form,
         summary: form.summary?.trim() || undefined,
         description: form.description?.trim() || undefined,
+        featuredProjectId,
       })
       showToast('저장되었습니다!', 'success')
     } catch {

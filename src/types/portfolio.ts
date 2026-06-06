@@ -42,6 +42,7 @@ export interface UpdatePortfolioRequest {
   summary?: string
   description?: string
   templateId?: number
+  featuredProjectId?: number
   projects: Project[]
   isPublic?: boolean
 }
