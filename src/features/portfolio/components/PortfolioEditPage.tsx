@@ -20,6 +20,17 @@ function ProjectEditor({
   isFeatured: boolean
   onSetFeatured: () => void
 }) {
+  const [rawTechStacks, setRawTechStacks] = useState(() => (project.techStacks ?? []).join(', '))
+  const [rawHighlights, setRawHighlights] = useState(() => (project.highlights ?? []).join(', '))
+
+  useEffect(() => {
+    setRawTechStacks((project.techStacks ?? []).join(', '))
+  }, [project.repoId])
+
+  useEffect(() => {
+    setRawHighlights((project.highlights ?? []).join(', '))
+  }, [project.repoId])
+
   function update<K extends keyof Project>(key: K, value: Project[K]) {
     onChange({ ...project, [key]: value })
   }
@@ -94,8 +105,8 @@ function ProjectEditor({
             기술 스택 <span className="text-neutral-300">(쉼표로 구분)</span>
           </span>
           <input
-            value={(project.techStacks ?? []).join(', ')}
-            onChange={(e) => handleArrayInput('techStacks', e.target.value)}
+            value={rawTechStacks}
+            onChange={(e) => { setRawTechStacks(e.target.value); handleArrayInput('techStacks', e.target.value) }}
             placeholder="Java, Spring Boot, MySQL"
             className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400"
           />
@@ -115,8 +126,8 @@ function ProjectEditor({
             주요 기능 <span className="text-neutral-300">(쉼표로 구분)</span>
           </span>
           <input
-            value={(project.highlights ?? []).join(', ')}
-            onChange={(e) => handleArrayInput('highlights', e.target.value)}
+            value={rawHighlights}
+            onChange={(e) => { setRawHighlights(e.target.value); handleArrayInput('highlights', e.target.value) }}
             placeholder="GitHub OAuth 로그인, Gemini 기반 생성"
             className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400"
           />
