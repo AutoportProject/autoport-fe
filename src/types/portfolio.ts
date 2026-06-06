@@ -26,13 +26,13 @@ export interface Portfolio {
 export interface PortfolioListItem {
   portfolioId: number
   title: string
-  summary?: string
-  description?: string
-  templateId: number
+  summary: string
+  description: string
   isPublic: boolean
-  featuredProjectName?: string
   createdAt: string
-  updatedAt: string
+  updatedAt?: string
+  templateId?: number
+  featuredProjectName?: string
 }
 
 export interface UpdatePortfolioRequest {
