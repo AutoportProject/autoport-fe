@@ -41,7 +41,6 @@ export interface UpdatePortfolioRequest {
   templateId: number
   projects: Project[]
   isPublic?: boolean
-  featuredProjectId?: number
 }
 
 export interface UpdatePortfolioResponse {

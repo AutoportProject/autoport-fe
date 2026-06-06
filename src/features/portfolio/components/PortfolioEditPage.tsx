@@ -147,8 +147,8 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     templateId: 1,
     projects: [],
     isPublic: true,
-    featuredProjectId: undefined,
   })
+  const [featuredProjectId, setFeaturedProjectId] = useState<number | undefined>(undefined)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   useEffect(() => {
@@ -159,8 +159,8 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       templateId: portfolio.templateId ?? 1,
       projects: portfolio.projects ?? [],
       isPublic: portfolio.isPublic,
-      featuredProjectId: portfolio.featuredProjectId,
     })
+    setFeaturedProjectId(portfolio.featuredProjectId)
   }, [portfolio])
 
   function updateProject(index: number, updated: Project) {
@@ -294,8 +294,8 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
                 index={i}
                 onChange={(updated) => updateProject(i, updated)}
                 onRemove={() => {}}
-                isFeatured={form.featuredProjectId === project.repoId}
-                onSetFeatured={() => setForm((p) => ({ ...p, featuredProjectId: project.repoId }))}
+                isFeatured={featuredProjectId === project.repoId}
+                onSetFeatured={() => setFeaturedProjectId(project.repoId)}
               />
             ))
           )}
