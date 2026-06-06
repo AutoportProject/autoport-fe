@@ -144,6 +144,8 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
   const [form, setForm] = useState<UpdatePortfolioRequest>({
     title: '',
     bio: '',
+    summary: '',
+    description: '',
     templateId: 1,
     projects: [],
     isPublic: true,
@@ -156,6 +158,8 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
     setForm({
       title: portfolio.title ?? '',
       bio: portfolio.bio ?? '',
+      summary: portfolio.summary ?? '',
+      description: portfolio.description ?? '',
       templateId: portfolio.templateId ?? 1,
       projects: portfolio.projects ?? [],
       isPublic: portfolio.isPublic,
@@ -257,6 +261,27 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
               onChange={(e) => setForm((p) => ({ ...p, bio: e.target.value }))}
               rows={4}
               placeholder="간략한 자기소개를 작성해주세요."
+              className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400 resize-none"
+            />
+          </div>
+
+          <div>
+            <span className="caption-m-sm text-neutral-400">한 줄 요약</span>
+            <input
+              value={form.summary ?? ''}
+              onChange={(e) => setForm((p) => ({ ...p, summary: e.target.value }))}
+              placeholder="포트폴리오를 한 줄로 요약해주세요."
+              className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400"
+            />
+          </div>
+
+          <div>
+            <span className="caption-m-sm text-neutral-400">상세 설명</span>
+            <textarea
+              value={form.description ?? ''}
+              onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+              rows={4}
+              placeholder="포트폴리오에 대한 상세 설명을 작성해주세요."
               className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400 resize-none"
             />
           </div>

@@ -10,6 +10,8 @@ import type { AnalyzeResult } from '@/store/repoStore'
 export interface PortfolioResult {
   portfolioTitle: string
   introduction: string
+  summary?: string
+  description?: string
   projects: {
     name: string
     oneLineDescription: string
@@ -39,6 +41,8 @@ const toDraftPortfolioRequest = (
   return {
     title: result.portfolioTitle,
     bio: result.introduction,
+    ...(result.summary && { summary: result.summary }),
+    ...(result.description && { description: result.description }),
     featuredProjectId: analyzeResult.repoId,
     isPublic: false,
     projects: result.projects.map((project, index) => ({

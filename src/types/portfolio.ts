@@ -38,6 +38,8 @@ export interface PortfolioListItem {
 export interface UpdatePortfolioRequest {
   title: string
   bio: string
+  summary?: string
+  description?: string
   templateId: number
   projects: Project[]
   isPublic?: boolean
@@ -60,6 +62,8 @@ export interface PortfolioListResponse {
 export interface CreatePortfolioRequest {
   title: string
   bio: string
+  summary?: string
+  description?: string
   templateId?: number
   projects: Project[]
   featuredProjectId?: number
