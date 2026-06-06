@@ -186,7 +186,11 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       return
     }
     try {
-      await update(portfolioId, form)
+      await update(portfolioId, {
+        ...form,
+        summary: form.summary?.trim() || undefined,
+        description: form.description?.trim() || undefined,
+      })
       showToast('저장되었습니다!', 'success')
     } catch {
       // 에러는 훅에서 관리
