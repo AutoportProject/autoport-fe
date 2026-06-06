@@ -6,10 +6,12 @@ import { usePortfolioList, useDeletePortfolio } from '@/hooks/usePortfolio'
 import type { PortfolioListItem } from '@/types/portfolio'
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ko-KR', {
+  return new Date(iso).toLocaleString('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
   })
 }
 
@@ -74,7 +76,9 @@ function PortfolioCard({
               {portfolio.summary || portfolio.description}
             </p>
           )}
-          <p className="caption-m-sm text-neutral-400">수정일 · {formatDate(portfolio.updatedAt)}</p>
+          {portfolio.updatedAt && (
+            <p className="caption-m-sm text-neutral-400">수정일 · {formatDate(portfolio.updatedAt)}</p>
+          )}
         </div>
         <span
           className={`caption-m-sm shrink-0 rounded-full px-3 py-1 ${
