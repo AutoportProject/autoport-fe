@@ -125,11 +125,12 @@ function ProjectEditor({
           <span className="caption-m-sm text-neutral-400">
             주요 기능 <span className="text-neutral-300">(쉼표로 구분)</span>
           </span>
-          <input
+          <textarea
             value={rawHighlights}
             onChange={(e) => { setRawHighlights(e.target.value); handleArrayInput('highlights', e.target.value) }}
             placeholder="GitHub OAuth 로그인, Gemini 기반 생성"
-            className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400"
+            rows={3}
+            className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400 resize-none"
           />
           {(project.highlights ?? []).length > 0 && (
             <ul className="mt-2 flex flex-col gap-1.5">
