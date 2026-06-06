@@ -66,10 +66,12 @@ function PortfolioCard({
     <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <h2 className="body-sb text-neutral-950">{portfolio.title}</h2>
-          {portfolio.featuredProjectName && (
-            <p className="caption-m-sm text-neutral-400">
-              대표 프로젝트 · {portfolio.featuredProjectName}
+          <h2 className="body-sb text-neutral-950">
+            {portfolio.featuredProjectName ?? portfolio.title}
+          </h2>
+          {(portfolio.summary || portfolio.description) && (
+            <p className="body-m text-neutral-500 line-clamp-2">
+              {portfolio.summary || portfolio.description}
             </p>
           )}
           <p className="caption-m-sm text-neutral-400">수정일 · {formatDate(portfolio.updatedAt)}</p>
