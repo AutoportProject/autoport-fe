@@ -13,6 +13,7 @@ export interface Portfolio {
   portfolioId: number
   title: string
   bio: string
+  introduction?: string
   summary?: string
   description?: string
   templateId: number
@@ -40,7 +41,7 @@ export interface UpdatePortfolioRequest {
   bio: string
   summary?: string
   description?: string
-  templateId: number
+  templateId?: number
   projects: Project[]
   isPublic?: boolean
 }
