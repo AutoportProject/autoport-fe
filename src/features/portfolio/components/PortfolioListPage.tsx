@@ -59,10 +59,12 @@ function PortfolioCard({
   portfolio,
   onEdit,
   onDelete,
+  onShare,
 }: {
   portfolio: PortfolioListItem
   onEdit: () => void
   onDelete: () => void
+  onShare: () => void
 }) {
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6">
@@ -98,6 +100,13 @@ function PortfolioCard({
           편집
         </button>
         <button
+          onClick={onShare}
+          disabled={!portfolio.isPublic}
+          className="body-m flex-1 rounded-xl border border-neutral-200 py-2.5 text-neutral-700 hover:bg-neutral-50 transition disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed"
+        >
+          공유
+        </button>
+        <button
           onClick={onDelete}
           className="body-m flex-1 rounded-xl border border-red-100 py-2.5 text-red-400 hover:bg-red-50 transition"
         >
@@ -113,6 +122,22 @@ export default function PortfolioListPage() {
   const { portfolios, loading, error, refetch } = usePortfolioList()
   const { remove, loading: deleting } = useDeletePortfolio()
   const [deleteTarget, setDeleteTarget] = useState<PortfolioListItem | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
+
+  function showToast(message: string) {
+    setToast(message)
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  async function handleShare(portfolioId: number) {
+    const url = `https://autoport-fe-git-develop.vercel.app/portfolio/${portfolioId}`
+    try {
+      await navigator.clipboard.writeText(url)
+      showToast('링크가 복사되었습니다!')
+    } catch {
+      showToast('링크 복사에 실패했습니다.')
+    }
+  }
 
   async function handleDelete() {
     if (!deleteTarget) return
@@ -150,6 +175,12 @@ export default function PortfolioListPage() {
 
   return (
     <div className="flex w-full flex-col items-center gap-10 px-6 py-12">
+      {toast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 rounded-xl bg-neutral-900 px-6 py-3 text-white shadow-lg body-m">
+          {toast}
+        </div>
+      )}
+
       <div className="flex w-full max-w-2xl flex-col gap-1">
         <h1 className="title-bold text-neutral-950">내 포트폴리오</h1>
         <p className="body-m text-neutral-500">{portfolios.length}개의 포트폴리오</p>
@@ -170,6 +201,7 @@ export default function PortfolioListPage() {
               portfolio={p}
               onEdit={() => router.push(`/portfolio/${p.portfolioId}/edit`)}
               onDelete={() => setDeleteTarget(p)}
+              onShare={() => handleShare(p.portfolioId)}
             />
           ))
         )}
