@@ -130,7 +130,8 @@ export default function PortfolioListPage() {
   }
 
   async function handleShare(portfolioId: number) {
-    const url = `https://autoport-fe-git-develop.vercel.app/portfolio/${portfolioId}`
+    const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://autoport-fe-git-develop.vercel.app'
+    const url = `${baseUrl}/portfolio/${portfolioId}`
     try {
       await navigator.clipboard.writeText(url)
       showToast('링크가 복사되었습니다!')
