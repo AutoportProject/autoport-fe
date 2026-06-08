@@ -169,8 +169,8 @@ const MyPage = () => {
                       <h3 className="body-sb line-clamp-2 text-neutral-950">
                         {portfolio.title}
                       </h3>
-                      <p className="body-m mt-2 line-clamp-1 text-neutral-500">
-                        대표 프로젝트: {portfolio.featuredProjectName || '-'}
+                      <p className="body-m mt-2 line-clamp-3 whitespace-pre-line text-neutral-500">
+                        {portfolio.summary || portfolio.description || '프로젝트 요약이 아직 없어요.'}
                       </p>
                     </div>
                   </div>
