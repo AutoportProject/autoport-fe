@@ -12,7 +12,7 @@ export default function SignupComplete() {
         <h1 className="title-bold">회원가입이 완료되었습니다!</h1>
         <Image src="/octopus.svg" alt="" width={400} height={400} />
         <button
-          onClick={() => router.push('/home')}
+          onClick={() => router.push('/')}
           className="bg-blue-500 text-white py-3 px-6 rounded-md body-m"
         >
           포트폴리오 만들러 가기

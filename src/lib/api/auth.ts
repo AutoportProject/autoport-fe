@@ -41,13 +41,11 @@ export const oauthSignup = async (data: {
   name: string
   bio: string
 }) => {
-  const res = await fetch(`${API_BASE_URL}/api/auth/signup/github`, // 수정!
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }
-  )
+  const res = await fetch(`${API_BASE_URL}/api/auth/github/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
   return res.json()
 }
 

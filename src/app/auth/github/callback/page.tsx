@@ -13,7 +13,7 @@ function GithubCallbackContent() {
   useEffect(() => {
     const code = searchParams.get('code')
     if (!code) {
-      router.push('/home')
+      router.push('/')
       return
     }
 
@@ -25,7 +25,7 @@ function GithubCallbackContent() {
         } else {
           sessionStorage.removeItem('tempUserId')
           localStorage.setItem('accessToken', res.data.accessToken)
-          router.push('/home')
+          router.push('/')
         }
       } else {
         alert('GitHub 로그인에 실패했습니다!')
