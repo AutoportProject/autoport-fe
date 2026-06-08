@@ -10,7 +10,8 @@ export interface PortfolioProject {
   description: string
   techStacks: string[]
   highlights: string[]
-  githubUrl: string
+  githubUrl?: string
+  deployUrl?: string
   order: number
 }
 
@@ -18,8 +19,10 @@ export interface PortfolioDetail {
   portfolioId: number | string
   title: string
   bio: string
+  summary?: string
+  description?: string
   templateId: number | string
-  featuredProjectId: number | string
+  featuredProjectId?: number | string
   projects: PortfolioProject[]
   createdAt: string
   updatedAt: string

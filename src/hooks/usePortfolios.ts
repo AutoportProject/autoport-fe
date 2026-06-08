@@ -7,8 +7,10 @@ import axiosInstance from '@/lib/api/axios'
 export interface PortfolioSummary {
   portfolioId: number | string
   title: string
+  summary?: string
+  description?: string
   templateId: number | string
-  featuredProjectName: string
+  featuredProjectName?: string
   createdAt: string
   updatedAt: string
   isPublic: boolean
