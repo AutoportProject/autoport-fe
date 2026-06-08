@@ -52,6 +52,7 @@ const toDraftPortfolioRequest = (
       techStacks: project.techStacks.length > 0 ? project.techStacks : fallbackTechStacks,
       highlights: project.highlights.length > 0 ? project.highlights : project.mainFeatures,
       githubUrl: analyzeResult.aiInputData.repoUrl,
+      deployUrl: result.projectLinks[index],
       order: index + 1,
     })),
   }
