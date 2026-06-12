@@ -16,7 +16,11 @@ export interface PortfolioPreviewProject {
   repoId?: number | string
   name: string
   description?: string
+  oneLineDescription?: string
+  estimatedPeriod?: string
+  role?: string
   techStacks?: string[]
+  mainFeatures?: string[]
   highlights?: string[]
   githubUrl?: string
   deployUrl?: string
@@ -28,6 +32,8 @@ export interface PortfolioPreviewData {
   bio?: string
   summary?: string
   description?: string
+  technicalContributions?: string[]
+  codeHighlights?: string[]
   templateId?: number | string
   projects: PortfolioPreviewProject[]
   createdAt?: string
@@ -161,6 +167,11 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                       Project {project.order ?? index + 1}
                     </span>
                     <h3 className="body-sb mt-1 text-neutral-950">{project.name}</h3>
+                    {project.oneLineDescription && (
+                      <p className="body-m mt-1 break-keep text-neutral-500">
+                        {project.oneLineDescription}
+                      </p>
+                    )}
                   </div>
                   {(project.githubUrl || project.deployUrl) && (
                     <div className="flex flex-wrap gap-2">
@@ -186,6 +197,23 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                   )}
                 </div>
 
+                {(project.estimatedPeriod || project.role) && (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {project.estimatedPeriod && (
+                      <div className="rounded-lg bg-neutral-50 p-4">
+                        <span className="caption-m-sm text-neutral-400">개발 기간</span>
+                        <p className="body-m mt-1 text-neutral-700">{project.estimatedPeriod}</p>
+                      </div>
+                    )}
+                    {project.role && (
+                      <div className="rounded-lg bg-neutral-50 p-4">
+                        <span className="caption-m-sm text-neutral-400">역할</span>
+                        <p className="body-m mt-1 text-neutral-700">{project.role}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {project.description && (
                   <p className="body-m whitespace-pre-line break-keep border-l-2 border-neutral-200 pl-4 leading-relaxed text-neutral-600">
                     {project.description}
@@ -208,6 +236,20 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                   </div>
                 )}
 
+                {(project.mainFeatures?.length ?? 0) > 0 && (
+                  <div className="border-t border-neutral-100 pt-4">
+                    <span className="caption-m-sm text-neutral-400">주요 기능</span>
+                    <ul className="mt-2 flex flex-col gap-2">
+                      {project.mainFeatures?.map((feature) => (
+                      <li key={feature} className="body-m flex gap-2 text-neutral-700">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                        <span>{feature}</span>
+                      </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {(project.highlights?.length ?? 0) > 0 && (
                   <div className="border-t border-neutral-100 pt-4">
                     <span className="caption-m-sm text-neutral-400">하이라이트</span>
@@ -226,6 +268,34 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
           ))}
         </div>
       </section>
+
+      {(portfolio.technicalContributions?.length ?? 0) > 0 && (
+        <section className="rounded-lg border border-neutral-200 bg-white p-6">
+          <span className="caption-m-sm text-neutral-400">기술적 기여</span>
+          <ul className="mt-3 flex flex-col gap-2">
+            {portfolio.technicalContributions?.map((item) => (
+              <li key={item} className="body-m flex gap-2 text-neutral-700">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(portfolio.codeHighlights?.length ?? 0) > 0 && (
+        <section className="rounded-lg border border-neutral-200 bg-white p-6">
+          <span className="caption-m-sm text-neutral-400">코드/커밋 기반 근거</span>
+          <ul className="mt-3 flex flex-col gap-2">
+            {portfolio.codeHighlights?.map((item, i) => (
+              <li key={i} className="caption-m-sm flex gap-3 text-neutral-500">
+                <span className="shrink-0 text-neutral-300">{String(i + 1).padStart(2, '0')}</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }
