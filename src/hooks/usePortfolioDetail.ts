@@ -8,7 +8,11 @@ export interface PortfolioProject {
   repoId: number | string
   name: string
   description: string
+  oneLineDescription?: string
+  estimatedPeriod?: string
+  role?: string
   techStacks: string[]
+  mainFeatures?: string[]
   highlights: string[]
   githubUrl?: string
   deployUrl?: string
@@ -21,6 +25,10 @@ export interface PortfolioDetail {
   bio: string
   summary?: string
   description?: string
+  technicalContributions?: string[]
+  codeHighlights?: string[]
+  projectLinks?: string[]
+  generatedAt?: string
   templateId: number | string
   featuredProjectId?: number | string
   projects: PortfolioProject[]

@@ -2,7 +2,11 @@ export interface Project {
   repoId: number
   name: string
   description: string
+  oneLineDescription?: string
+  estimatedPeriod?: string
+  role?: string
   techStacks?: string[]
+  mainFeatures?: string[]
   highlights?: string[]
   githubUrl?: string
   deployUrl?: string
@@ -16,6 +20,10 @@ export interface Portfolio {
   introduction?: string
   summary?: string
   description?: string
+  technicalContributions?: string[]
+  codeHighlights?: string[]
+  projectLinks?: string[]
+  generatedAt?: string
   templateId: number
   isPublic: boolean
   featuredProjectId?: number
@@ -66,6 +74,10 @@ export interface CreatePortfolioRequest {
   bio: string
   summary?: string
   description?: string
+  technicalContributions?: string[]
+  codeHighlights?: string[]
+  projectLinks?: string[]
+  generatedAt?: string
   templateId?: number
   projects: Project[]
   featuredProjectId?: number
