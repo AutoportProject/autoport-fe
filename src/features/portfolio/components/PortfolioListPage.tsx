@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePortfolioList, useDeletePortfolio } from '@/hooks/usePortfolio'
+import { createShareLink } from '@/lib/api/portfolio'
 import type { PortfolioListItem } from '@/types/portfolio'
 
 function formatDate(iso: string) {
@@ -130,9 +131,9 @@ export default function PortfolioListPage() {
   }
 
   async function handleShare(portfolioId: number) {
-    const url = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/home/my/portfolios/${portfolioId}`
     try {
-      await navigator.clipboard.writeText(url)
+      const { shareUrl } = await createShareLink(portfolioId)
+      await navigator.clipboard.writeText(shareUrl)
       showToast('링크가 복사되었습니다!')
     } catch {
       showToast('링크 복사에 실패했습니다.')

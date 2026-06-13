@@ -3,6 +3,7 @@ import type {
   CreatePortfolioResponse,
   Portfolio,
   PortfolioListResponse,
+  PortfolioShareResponse,
   UpdatePortfolioRequest,
   UpdatePortfolioResponse,
 } from '@/types/portfolio'
@@ -99,4 +100,30 @@ export const deletePortfolio = async (portfolioId: number): Promise<void> => {
     },
   })
   if (!res.ok) throw new Error('포트폴리오 삭제에 실패했습니다.')
+}
+
+// 포트폴리오 공유 링크 생성
+export const createShareLink = async (portfolioId: number): Promise<PortfolioShareResponse> => {
+  const res = await fetch(`${API_BASE_URL}/api/portfolio/${portfolioId}/share`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`,
+    },
+  })
+  if (!res.ok) throw new Error('공유 링크 생성에 실패했습니다.')
+  const json = await res.json()
+  return json.data
+}
+
+// 공유된 포트폴리오 조회 (비로그인)
+export const fetchSharedPortfolio = async (shareToken: string): Promise<Portfolio> => {
+  const res = await fetch(`${API_BASE_URL}/api/portfolio/share/${shareToken}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  if (!res.ok) throw new Error('포트폴리오를 불러오는데 실패했습니다.')
+  const json = await res.json()
+  return json.data
 }
