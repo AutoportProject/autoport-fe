@@ -132,7 +132,8 @@ export default function PortfolioListPage() {
 
   async function handleShare(portfolioId: number) {
     try {
-      const { shareUrl } = await createShareLink(portfolioId)
+      const { shareToken } = await createShareLink(portfolioId)
+      const shareUrl = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/portfolio/share/${shareToken}`
       await navigator.clipboard.writeText(shareUrl)
       showToast('링크가 복사되었습니다!')
     } catch {
