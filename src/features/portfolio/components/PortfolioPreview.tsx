@@ -1,16 +1,12 @@
 'use client'
 
 import {
-  CalendarDays,
   ExternalLink,
-  FileText,
   FolderGit,
   Link as LinkIcon,
   Lock,
-  Sparkles,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { formatKoreanDate } from '@/lib/date'
 
 export interface PortfolioPreviewProject {
   repoId?: number | string
@@ -47,8 +43,6 @@ interface PortfolioPreviewProps {
 }
 
 export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPreviewProps) {
-  const hasMeta = portfolio.createdAt || portfolio.updatedAt || portfolio.projects.length > 0
-
   return (
     <div className="flex w-full flex-col gap-6">
       <section className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
@@ -89,62 +83,15 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
               </span>
             )}
           </div>
-
-          {hasMeta && (
-            <div className="grid border-t border-neutral-100 sm:grid-cols-3">
-              <div className="flex gap-3 px-6 py-4 sm:border-r sm:border-neutral-100">
-                <CalendarDays className="mt-0.5 shrink-0 text-neutral-300" size={18} />
-                <div>
-                  <span className="caption-m-sm text-neutral-400">생성일</span>
-                  <p className="caption-m-lg mt-1 text-neutral-700">
-                    {formatKoreanDate(portfolio.createdAt)}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-3 border-t border-neutral-100 px-6 py-4 sm:border-r sm:border-t-0 sm:border-neutral-100">
-                <Sparkles className="mt-0.5 shrink-0 text-neutral-300" size={18} />
-                <div>
-                  <span className="caption-m-sm text-neutral-400">수정일</span>
-                  <p className="caption-m-lg mt-1 text-neutral-700">
-                    {formatKoreanDate(portfolio.updatedAt)}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-3 border-t border-neutral-100 px-6 py-4 sm:border-t-0">
-                <FolderGit className="mt-0.5 shrink-0 text-neutral-300" size={18} />
-                <div>
-                  <span className="caption-m-sm text-neutral-400">프로젝트</span>
-                  <p className="caption-m-lg mt-1 text-neutral-700">
-                    {portfolio.projects.length}개
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
-      {(portfolio.summary || portfolio.description) && (
-        <section className="grid gap-3 md:grid-cols-[0.9fr_1.1fr]">
-          {portfolio.summary && (
-            <div className="rounded-lg border border-blue-100 bg-blue-50 p-5">
-              <div className="flex items-center gap-2 text-blue-600">
-                <FileText size={17} />
-                <span className="caption-m-sm">요약</span>
-              </div>
-              <p className="body-m mt-3 whitespace-pre-line break-keep leading-relaxed text-neutral-700">
-                {portfolio.summary}
-              </p>
-            </div>
-          )}
-          {portfolio.description && (
-            <div className="rounded-lg border border-neutral-200 bg-white p-5">
-              <span className="caption-m-sm text-neutral-400">설명</span>
-              <p className="body-m mt-3 whitespace-pre-line break-keep leading-relaxed text-neutral-700">
-                {portfolio.description}
-              </p>
-            </div>
-          )}
+      {portfolio.description && (
+        <section className="rounded-lg border border-neutral-200 bg-white p-5">
+          <span className="caption-m-sm text-neutral-400">설명</span>
+          <p className="body-m mt-3 whitespace-pre-line break-keep leading-relaxed text-neutral-700">
+            {portfolio.description}
+          </p>
         </section>
       )}
 
@@ -244,20 +191,6 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                       <li key={feature} className="body-m flex gap-2 text-neutral-700">
                         <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
                         <span>{feature}</span>
-                      </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {(project.highlights?.length ?? 0) > 0 && (
-                  <div className="border-t border-neutral-100 pt-4">
-                    <span className="caption-m-sm text-neutral-400">하이라이트</span>
-                    <ul className="mt-2 flex flex-col gap-2">
-                      {project.highlights?.map((highlight) => (
-                      <li key={highlight} className="body-m flex gap-2 text-neutral-700">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500" />
-                        <span>{highlight}</span>
                       </li>
                       ))}
                     </ul>
