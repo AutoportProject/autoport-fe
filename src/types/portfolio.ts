@@ -90,3 +90,10 @@ export interface CreatePortfolioResponse {
   createdAt: string
   isPublic: boolean
 }
+
+export interface PortfolioShareResponse {
+  portfolioId: number
+  shareToken: string
+  shareUrl: string
+  isPublic: boolean
+}
