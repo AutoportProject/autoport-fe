@@ -44,11 +44,20 @@ const PortfolioDetailPage = () => {
         import('jspdf'),
       ])
 
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      })
+      const element = previewRef.current
+      const originalPadding = element.style.padding
+      element.style.padding = '0 32px'
+
+      let canvas
+      try {
+        canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+        })
+      } finally {
+        element.style.padding = originalPadding
+      }
 
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF('p', 'mm', 'a4')
