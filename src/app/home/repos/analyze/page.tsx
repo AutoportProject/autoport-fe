@@ -22,6 +22,7 @@ const AnalyzePage = () => {
   }
 
   const { aiInputData } = analyzeResult
+  const prReviewCount = analyzeResult.prReviewCount ?? aiInputData.prReviewCount ?? 0
 
   return (
     <div className="flex w-full flex-col items-center gap-10 px-6 py-12">
@@ -42,7 +43,7 @@ const AnalyzePage = () => {
         </div>
 
         {/* 스탯 */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="flex flex-col gap-1 rounded-2xl border border-neutral-200 p-5">
             <span className="caption-m-sm text-neutral-400">커밋 수</span>
             <span className="title-bold text-neutral-950">{analyzeResult.commitCount.toLocaleString()}</span>
@@ -50,6 +51,10 @@ const AnalyzePage = () => {
           <div className="flex flex-col gap-1 rounded-2xl border border-neutral-200 p-5">
             <span className="caption-m-sm text-neutral-400">스타</span>
             <span className="title-bold text-neutral-950">{analyzeResult.starCount.toLocaleString()}</span>
+          </div>
+          <div className="flex flex-col gap-1 rounded-2xl border border-neutral-200 p-5">
+            <span className="caption-m-sm text-neutral-400">PR 리뷰</span>
+            <span className="title-bold text-neutral-950">{prReviewCount.toLocaleString()}</span>
           </div>
           <div className="flex flex-col gap-1 rounded-2xl border border-neutral-200 p-5">
             <span className="caption-m-sm text-neutral-400">중요도 점수</span>
