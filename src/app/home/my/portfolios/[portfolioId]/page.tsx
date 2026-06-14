@@ -40,7 +40,7 @@ const PortfolioDetailPage = () => {
     setIsExporting(true)
     try {
       const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import('html2canvas'),
+        import('html2canvas-pro'),
         import('jspdf'),
       ])
 
