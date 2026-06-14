@@ -24,6 +24,7 @@ export interface AnalyzeResult {
   activitySummary: string
   starCount: number
   commitCount: number
+  prReviewCount: number
   importanceScore: number
   aiInputData: {
     projectName: string
@@ -39,6 +40,7 @@ export interface AnalyzeResult {
     forkCount: number
     openIssuesCount: number
     commitCount: number
+    prReviewCount: number
     importanceScore: number
     repositoryCreatedAt: string
     repositoryUpdatedAt: string
