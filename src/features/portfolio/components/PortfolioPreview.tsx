@@ -45,10 +45,7 @@ interface PortfolioPreviewProps {
 export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPreviewProps) {
   return (
     <div className="flex w-full flex-col gap-6">
-      <section
-        className="overflow-hidden rounded-lg border border-neutral-200 bg-white"
-        data-pdf-section="true"
-      >
+      <section className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
         <div className="h-1.5 bg-neutral-950" />
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-start sm:justify-between">
@@ -93,10 +90,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
       </section>
 
       {portfolio.description && (
-        <section
-          className="rounded-lg border border-neutral-200 bg-white p-5"
-          data-pdf-section="true"
-        >
+        <section className="rounded-lg border border-neutral-200 bg-white p-5">
           <span className="caption-m-sm text-neutral-400">설명</span>
           <p className="body-m mt-3 whitespace-pre-line break-keep leading-relaxed text-neutral-700">
             {portfolio.description}
@@ -105,7 +99,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
       )}
 
       <section className="flex flex-col gap-3">
-        <div data-pdf-section="true">
+        <div>
           <span className="caption-m-sm text-neutral-400">Projects</span>
           <h2 className="title-sb-md mt-1 text-neutral-950">프로젝트 구성</h2>
         </div>
@@ -117,10 +111,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
               className="rounded-lg border border-neutral-200 bg-white p-5"
             >
               <div className="flex flex-col gap-4">
-                <div
-                  className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
-                  data-pdf-section="true"
-                >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <span className="inline-flex w-fit rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-500">
                       Project {project.order ?? index + 1}
@@ -157,10 +148,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                 </div>
 
                 {(project.estimatedPeriod || project.role) && (
-                  <div
-                    className="grid gap-3 sm:grid-cols-2"
-                    data-pdf-section="true"
-                  >
+                  <div className="grid gap-3 sm:grid-cols-2">
                     {project.estimatedPeriod && (
                       <div className="rounded-lg bg-neutral-50 p-4">
                         <span className="caption-m-sm text-neutral-400">개발 기간</span>
@@ -177,16 +165,13 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                 )}
 
                 {project.description && (
-                  <p
-                    className="body-m whitespace-pre-line break-keep border-l-2 border-neutral-200 pl-4 leading-relaxed text-neutral-600"
-                    data-pdf-section="true"
-                  >
+                  <p className="body-m whitespace-pre-line break-keep border-l-2 border-neutral-200 pl-4 leading-relaxed text-neutral-600">
                     {project.description}
                   </p>
                 )}
 
                 {(project.techStacks?.length ?? 0) > 0 && (
-                  <div data-pdf-section="true">
+                  <div>
                     <span className="caption-m-sm text-neutral-400">기술 스택</span>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {project.techStacks?.map((stack) => (
@@ -202,10 +187,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                 )}
 
                 {(project.mainFeatures?.length ?? 0) > 0 && (
-                  <div
-                    className="border-t border-neutral-100 pt-4"
-                    data-pdf-section="true"
-                  >
+                  <div className="border-t border-neutral-100 pt-4">
                     <span className="caption-m-sm text-neutral-400">주요 기능</span>
                     <ul className="mt-2 flex flex-col gap-2">
                       {project.mainFeatures?.map((feature) => (
@@ -224,10 +206,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
       </section>
 
       {(portfolio.technicalContributions?.length ?? 0) > 0 && (
-        <section
-          className="rounded-lg border border-neutral-200 bg-white p-6"
-          data-pdf-section="true"
-        >
+        <section className="rounded-lg border border-neutral-200 bg-white p-6">
           <span className="caption-m-sm text-neutral-400">기술적 기여</span>
           <ul className="mt-3 flex flex-col gap-2">
             {portfolio.technicalContributions?.map((item) => (
@@ -241,10 +220,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
       )}
 
       {(portfolio.codeHighlights?.length ?? 0) > 0 && (
-        <section
-          className="rounded-lg border border-neutral-200 bg-white p-6"
-          data-pdf-section="true"
-        >
+        <section className="rounded-lg border border-neutral-200 bg-white p-6">
           <span className="caption-m-sm text-neutral-400">코드/커밋 기반 근거</span>
           <ul className="mt-3 flex flex-col gap-2">
             {portfolio.codeHighlights?.map((item, i) => (

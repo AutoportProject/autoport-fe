@@ -46,7 +46,7 @@ const PortfolioDetailPage = () => {
 
       const element = previewRef.current
       const originalPadding = element.style.padding
-      element.style.padding = '60px'
+      element.style.padding = '0 60px'
 
       const hiddenElements = Array.from(element.querySelectorAll<HTMLElement>('[data-pdf-hide]'))
       hiddenElements.forEach((el) => {
@@ -63,7 +63,6 @@ const PortfolioDetailPage = () => {
         if (project.githubUrl) {
           const section = document.createElement('div')
           section.className = 'border-t border-neutral-100 pt-4'
-          section.setAttribute('data-pdf-section', 'true')
 
           const caption = document.createElement('span')
           caption.className = 'caption-m-sm text-neutral-400'
@@ -82,7 +81,6 @@ const PortfolioDetailPage = () => {
         if (project.deployUrl) {
           const section = document.createElement('div')
           section.className = 'border-t border-neutral-100 pt-4'
-          section.setAttribute('data-pdf-section', 'true')
 
           const caption = document.createElement('span')
           caption.className = 'caption-m-sm text-neutral-400'
@@ -100,12 +98,6 @@ const PortfolioDetailPage = () => {
       })
 
       const elementRect = element.getBoundingClientRect()
-      const sectionRects = Array.from(
-        element.querySelectorAll<HTMLElement>('[data-pdf-section]'),
-      ).map((el) => {
-        const rect = el.getBoundingClientRect()
-        return { top: rect.top - elementRect.top, bottom: rect.bottom - elementRect.top }
-      })
 
       let canvas
       try {
@@ -127,26 +119,15 @@ const PortfolioDetailPage = () => {
       const pdfHeight = pdf.internal.pageSize.getHeight()
 
       const pxScale = canvas.width / elementRect.width
-      const sections = sectionRects
-        .map((s) => ({ top: s.top * pxScale, bottom: s.bottom * pxScale }))
-        .sort((a, b) => a.top - b.top)
-
+      const marginPx = 60 * pxScale
+      const marginMm = (marginPx * pdfWidth) / canvas.width
       const pageHeightPx = (pdfHeight * canvas.width) / pdfWidth
+      const pageContentHeightPx = pageHeightPx - marginPx * 2
 
       const pageRanges: { start: number; end: number }[] = []
       let cursor = 0
       while (cursor < canvas.height) {
-        let pageEnd = Math.min(cursor + pageHeightPx, canvas.height)
-
-        if (pageEnd < canvas.height) {
-          const crossing = sections.filter(
-            (s) => s.top > cursor && s.top < pageEnd && s.bottom > pageEnd,
-          )
-          if (crossing.length > 0) {
-            pageEnd = Math.min(...crossing.map((s) => s.top))
-          }
-        }
-
+        const pageEnd = Math.min(cursor + pageContentHeightPx, canvas.height)
         pageRanges.push({ start: cursor, end: pageEnd })
         cursor = pageEnd
       }
@@ -166,7 +147,7 @@ const PortfolioDetailPage = () => {
         const sliceHeightMm = (sliceHeight * pdfWidth) / canvas.width
 
         if (index > 0) pdf.addPage()
-        pdf.addImage(sliceImgData, 'PNG', 0, 0, pdfWidth, sliceHeightMm)
+        pdf.addImage(sliceImgData, 'PNG', 0, marginMm, pdfWidth, sliceHeightMm)
       })
 
       pdf.save(`${portfolio?.title || 'portfolio'}.pdf`)
