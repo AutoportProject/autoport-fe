@@ -49,6 +49,10 @@ export interface UpdatePortfolioRequest {
   bio: string
   summary?: string
   description?: string
+  technicalContributions?: string[]
+  codeHighlights?: string[]
+  projectLinks?: string[]
+  generatedAt?: string
   templateId?: number
   featuredProjectId?: number
   projects: Project[]
