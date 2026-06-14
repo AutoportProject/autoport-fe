@@ -21,22 +21,33 @@ function ProjectEditor({
   onSetFeatured: () => void
 }) {
   const [rawTechStacks, setRawTechStacks] = useState(() => (project.techStacks ?? []).join(', '))
-  const [rawHighlights, setRawHighlights] = useState(() => (project.highlights ?? []).join(', '))
+  const [rawMainFeatures, setRawMainFeatures] = useState(() =>
+    (project.mainFeatures ?? project.highlights ?? []).join(', '),
+  )
 
   useEffect(() => {
     setRawTechStacks((project.techStacks ?? []).join(', '))
   }, [project.repoId])
 
   useEffect(() => {
-    setRawHighlights((project.highlights ?? []).join(', '))
+    setRawMainFeatures((project.mainFeatures ?? project.highlights ?? []).join(', '))
   }, [project.repoId])
+
+  const features = project.mainFeatures ?? project.highlights ?? []
 
   function update<K extends keyof Project>(key: K, value: Project[K]) {
     onChange({ ...project, [key]: value })
   }
 
-  function handleArrayInput(key: 'techStacks' | 'highlights', raw: string) {
-    update(key, raw.split(',').map((s) => s.trim()).filter(Boolean))
+  function handleArrayInput(key: 'techStacks' | 'mainFeatures', raw: string) {
+    const values = raw.split(',').map((s) => s.trim()).filter(Boolean)
+
+    if (key === 'mainFeatures') {
+      onChange({ ...project, mainFeatures: values, highlights: values })
+      return
+    }
+
+    update(key, values)
   }
 
   return (
@@ -126,18 +137,18 @@ function ProjectEditor({
             주요 기능 <span className="text-neutral-300">(쉼표로 구분)</span>
           </span>
           <textarea
-            value={rawHighlights}
-            onChange={(e) => { setRawHighlights(e.target.value); handleArrayInput('highlights', e.target.value) }}
+            value={rawMainFeatures}
+            onChange={(e) => { setRawMainFeatures(e.target.value); handleArrayInput('mainFeatures', e.target.value) }}
             placeholder="GitHub OAuth 로그인, Gemini 기반 생성"
             rows={3}
             className="body-m mt-1 w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-neutral-700 focus:outline-none focus:border-neutral-400 resize-none"
           />
-          {(project.highlights ?? []).length > 0 && (
+          {features.length > 0 && (
             <ul className="mt-2 flex flex-col gap-1.5">
-              {project.highlights!.map((h, i) => (
+              {features.map((feature, i) => (
                 <li key={i} className="body-m flex gap-2 text-neutral-700">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-                  {h}
+                  {feature}
                 </li>
               ))}
             </ul>
@@ -171,6 +182,11 @@ export default function PortfolioEditPage({ portfolioId }: { portfolioId: number
       bio: portfolio.bio ?? '',
       summary: portfolio.summary ?? '',
       description: portfolio.description ?? '',
+      technicalContributions: portfolio.technicalContributions ?? [],
+      codeHighlights: portfolio.codeHighlights ?? [],
+      projectLinks: portfolio.projectLinks ?? [],
+      generatedAt: portfolio.generatedAt,
+      templateId: portfolio.templateId,
       projects: portfolio.projects ?? [],
       isPublic: portfolio.isPublic,
     })
