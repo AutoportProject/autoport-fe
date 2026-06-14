@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { ArrowLeft, Pencil, Share2 } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { ArrowLeft, Download, Pencil, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,8 @@ const PortfolioDetailPage = () => {
   const params = useParams<{ portfolioId: string }>()
   const portfolioId = params.portfolioId
   const { portfolio, isLoading, error } = usePortfolioDetail(portfolioId)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [isExporting, setIsExporting] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
 
   function showToast(message: string) {
@@ -29,6 +31,47 @@ const PortfolioDetailPage = () => {
       showToast('링크가 복사되었습니다.')
     } catch {
       showToast('링크 복사에 실패했습니다.')
+    }
+  }
+
+  const handleExportPdf = async () => {
+    if (!previewRef.current) return
+
+    setIsExporting(true)
+    try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ])
+
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      })
+
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = pdf.internal.pageSize.getHeight()
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width
+
+      let heightLeft = imgHeight
+      let position = 0
+
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
+      heightLeft -= pdfHeight
+
+      while (heightLeft > 0) {
+        position -= pdfHeight
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
+        heightLeft -= pdfHeight
+      }
+
+      pdf.save(`${portfolio?.title || 'portfolio'}.pdf`)
+    } finally {
+      setIsExporting(false)
     }
   }
 
@@ -84,6 +127,15 @@ const PortfolioDetailPage = () => {
               <Share2 size={16} />
               공유
             </Button>
+            <Button
+              variant="outline"
+              className="h-9 gap-2 rounded-lg px-3"
+              onClick={handleExportPdf}
+              disabled={isExporting}
+            >
+              <Download size={16} />
+              {isExporting ? 'PDF 생성 중...' : 'PDF로 내보내기'}
+            </Button>
             <Button asChild variant="outline" className="h-9 gap-2 rounded-lg px-3">
               <Link href={`/portfolio/${portfolioId}/edit`}>
                 <Pencil size={16} />
@@ -93,7 +145,9 @@ const PortfolioDetailPage = () => {
           </div>
         </div>
 
-        <PortfolioPreview portfolio={portfolio} />
+        <div ref={previewRef}>
+          <PortfolioPreview portfolio={portfolio} />
+        </div>
       </div>
     </div>
   )
