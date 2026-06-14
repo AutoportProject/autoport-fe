@@ -35,7 +35,7 @@ const PortfolioDetailPage = () => {
   }
 
   const handleExportPdf = async () => {
-    if (!previewRef.current) return
+    if (!previewRef.current || !portfolio) return
 
     setIsExporting(true)
     try {
@@ -44,11 +44,63 @@ const PortfolioDetailPage = () => {
         import('jspdf'),
       ])
 
-      const canvas = await html2canvas(previewRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
+      const element = previewRef.current
+      const originalPadding = element.style.padding
+      element.style.padding = '0 32px'
+
+      const hiddenElements: HTMLElement[] = []
+      const addedElements: HTMLElement[] = []
+      const articles = element.querySelectorAll<HTMLElement>('article')
+
+      portfolio.projects.forEach((project, index) => {
+        const article = articles[index]
+        if (!article) return
+
+        const linkButtons = article.querySelector<HTMLElement>('[data-pdf-hide]')
+        if (linkButtons) {
+          linkButtons.style.display = 'none'
+          hiddenElements.push(linkButtons)
+        }
+
+        if (project.githubUrl || project.deployUrl) {
+          const linksEl = document.createElement('div')
+          linksEl.style.marginTop = '12px'
+          linksEl.style.display = 'flex'
+          linksEl.style.flexDirection = 'column'
+          linksEl.style.gap = '4px'
+          linksEl.style.fontSize = '13px'
+          linksEl.style.color = '#737373'
+
+          if (project.githubUrl) {
+            const p = document.createElement('p')
+            p.textContent = `GitHub: ${project.githubUrl}`
+            linksEl.appendChild(p)
+          }
+          if (project.deployUrl) {
+            const p = document.createElement('p')
+            p.textContent = `배포: ${project.deployUrl}`
+            linksEl.appendChild(p)
+          }
+
+          article.appendChild(linksEl)
+          addedElements.push(linksEl)
+        }
       })
+
+      let canvas
+      try {
+        canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+        })
+      } finally {
+        element.style.padding = originalPadding
+        hiddenElements.forEach((el) => {
+          el.style.display = ''
+        })
+        addedElements.forEach((el) => el.remove())
+      }
 
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF('p', 'mm', 'a4')

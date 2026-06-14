@@ -121,7 +121,7 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
                     )}
                   </div>
                   {(project.githubUrl || project.deployUrl) && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2" data-pdf-hide="true">
                       {project.githubUrl && (
                         <Button asChild variant="outline" className="h-9 w-fit gap-2 rounded-lg px-3">
                           <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
