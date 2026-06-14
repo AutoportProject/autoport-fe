@@ -46,9 +46,13 @@ const PortfolioDetailPage = () => {
 
       const element = previewRef.current
       const originalPadding = element.style.padding
-      element.style.padding = '0 32px'
+      element.style.padding = '60px'
 
-      const hiddenElements: HTMLElement[] = []
+      const hiddenElements = Array.from(element.querySelectorAll<HTMLElement>('[data-pdf-hide]'))
+      hiddenElements.forEach((el) => {
+        el.style.display = 'none'
+      })
+
       const addedElements: HTMLElement[] = []
       const articles = element.querySelectorAll<HTMLElement>('article')
 
@@ -56,34 +60,34 @@ const PortfolioDetailPage = () => {
         const article = articles[index]
         if (!article) return
 
-        const linkButtons = article.querySelector<HTMLElement>('[data-pdf-hide]')
-        if (linkButtons) {
-          linkButtons.style.display = 'none'
-          hiddenElements.push(linkButtons)
-        }
-
         if (project.githubUrl || project.deployUrl) {
+          const section = document.createElement('div')
+          section.className = 'border-t border-neutral-100 pt-4'
+
+          const caption = document.createElement('span')
+          caption.className = 'caption-m-sm text-neutral-400'
+          caption.textContent = '관련 링크'
+          section.appendChild(caption)
+
           const linksEl = document.createElement('div')
-          linksEl.style.marginTop = '12px'
-          linksEl.style.display = 'flex'
-          linksEl.style.flexDirection = 'column'
-          linksEl.style.gap = '4px'
-          linksEl.style.fontSize = '13px'
-          linksEl.style.color = '#737373'
+          linksEl.className = 'mt-2 flex flex-col gap-1'
 
           if (project.githubUrl) {
             const p = document.createElement('p')
+            p.className = 'body-sb text-neutral-950'
             p.textContent = `GitHub: ${project.githubUrl}`
             linksEl.appendChild(p)
           }
           if (project.deployUrl) {
             const p = document.createElement('p')
+            p.className = 'body-sb text-neutral-950'
             p.textContent = `배포: ${project.deployUrl}`
             linksEl.appendChild(p)
           }
 
-          article.appendChild(linksEl)
-          addedElements.push(linksEl)
+          section.appendChild(linksEl)
+          article.appendChild(section)
+          addedElements.push(section)
         }
       })
 

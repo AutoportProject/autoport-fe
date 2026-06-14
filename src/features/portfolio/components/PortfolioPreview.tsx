@@ -68,7 +68,10 @@ export default function PortfolioPreview({ portfolio, eyebrow }: PortfolioPrevie
               </p>
             </div>
             {typeof portfolio.isPublic === 'boolean' && (
-              <span className="inline-flex w-fit items-center gap-1 rounded-full border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-500">
+              <span
+                className="inline-flex w-fit items-center gap-1 rounded-full border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-500"
+                data-pdf-hide="true"
+              >
                 {portfolio.isPublic ? (
                   <>
                     <FolderGit size={14} />
