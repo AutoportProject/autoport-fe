@@ -60,35 +60,51 @@ const PortfolioDetailPage = () => {
         const article = articles[index]
         if (!article) return
 
-        if (project.githubUrl || project.deployUrl) {
+        if (project.githubUrl) {
           const section = document.createElement('div')
           section.className = 'border-t border-neutral-100 pt-4'
+          section.setAttribute('data-pdf-section', 'true')
 
           const caption = document.createElement('span')
           caption.className = 'caption-m-sm text-neutral-400'
-          caption.textContent = '관련 링크'
+          caption.textContent = 'GitHub 링크'
           section.appendChild(caption)
 
-          const linksEl = document.createElement('div')
-          linksEl.className = 'mt-2 flex flex-col gap-1'
+          const link = document.createElement('p')
+          link.className = 'body-m mt-2 text-neutral-700'
+          link.textContent = project.githubUrl
+          section.appendChild(link)
 
-          if (project.githubUrl) {
-            const p = document.createElement('p')
-            p.className = 'body-sb text-neutral-950'
-            p.textContent = `GitHub: ${project.githubUrl}`
-            linksEl.appendChild(p)
-          }
-          if (project.deployUrl) {
-            const p = document.createElement('p')
-            p.className = 'body-sb text-neutral-950'
-            p.textContent = `배포: ${project.deployUrl}`
-            linksEl.appendChild(p)
-          }
-
-          section.appendChild(linksEl)
           article.appendChild(section)
           addedElements.push(section)
         }
+
+        if (project.deployUrl) {
+          const section = document.createElement('div')
+          section.className = 'border-t border-neutral-100 pt-4'
+          section.setAttribute('data-pdf-section', 'true')
+
+          const caption = document.createElement('span')
+          caption.className = 'caption-m-sm text-neutral-400'
+          caption.textContent = '배포 링크'
+          section.appendChild(caption)
+
+          const link = document.createElement('p')
+          link.className = 'body-m mt-2 text-neutral-700'
+          link.textContent = project.deployUrl
+          section.appendChild(link)
+
+          article.appendChild(section)
+          addedElements.push(section)
+        }
+      })
+
+      const elementRect = element.getBoundingClientRect()
+      const sectionRects = Array.from(
+        element.querySelectorAll<HTMLElement>('[data-pdf-section]'),
+      ).map((el) => {
+        const rect = el.getBoundingClientRect()
+        return { top: rect.top - elementRect.top, bottom: rect.bottom - elementRect.top }
       })
 
       let canvas
@@ -106,24 +122,52 @@ const PortfolioDetailPage = () => {
         addedElements.forEach((el) => el.remove())
       }
 
-      const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF('p', 'mm', 'a4')
       const pdfWidth = pdf.internal.pageSize.getWidth()
       const pdfHeight = pdf.internal.pageSize.getHeight()
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width
 
-      let heightLeft = imgHeight
-      let position = 0
+      const pxScale = canvas.width / elementRect.width
+      const sections = sectionRects
+        .map((s) => ({ top: s.top * pxScale, bottom: s.bottom * pxScale }))
+        .sort((a, b) => a.top - b.top)
 
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
-      heightLeft -= pdfHeight
+      const pageHeightPx = (pdfHeight * canvas.width) / pdfWidth
 
-      while (heightLeft > 0) {
-        position -= pdfHeight
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight)
-        heightLeft -= pdfHeight
+      const pageRanges: { start: number; end: number }[] = []
+      let cursor = 0
+      while (cursor < canvas.height) {
+        let pageEnd = Math.min(cursor + pageHeightPx, canvas.height)
+
+        if (pageEnd < canvas.height) {
+          const crossing = sections.filter(
+            (s) => s.top > cursor && s.top < pageEnd && s.bottom > pageEnd,
+          )
+          if (crossing.length > 0) {
+            pageEnd = Math.min(...crossing.map((s) => s.top))
+          }
+        }
+
+        pageRanges.push({ start: cursor, end: pageEnd })
+        cursor = pageEnd
       }
+
+      pageRanges.forEach(({ start, end }, index) => {
+        const sliceHeight = end - start
+        if (sliceHeight <= 0) return
+
+        const pageCanvas = document.createElement('canvas')
+        pageCanvas.width = canvas.width
+        pageCanvas.height = sliceHeight
+
+        const ctx = pageCanvas.getContext('2d')
+        ctx?.drawImage(canvas, 0, start, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight)
+
+        const sliceImgData = pageCanvas.toDataURL('image/png')
+        const sliceHeightMm = (sliceHeight * pdfWidth) / canvas.width
+
+        if (index > 0) pdf.addPage()
+        pdf.addImage(sliceImgData, 'PNG', 0, 0, pdfWidth, sliceHeightMm)
+      })
 
       pdf.save(`${portfolio?.title || 'portfolio'}.pdf`)
     } finally {
