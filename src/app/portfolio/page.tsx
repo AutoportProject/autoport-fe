@@ -1,5 +1,5 @@
-import PortfolioListPage from '@/features/portfolio/components/PortfolioListPage'
+import { redirect } from 'next/navigation'
 
 export default function Page() {
-  return <PortfolioListPage />
+  redirect('/home/my')
 }
