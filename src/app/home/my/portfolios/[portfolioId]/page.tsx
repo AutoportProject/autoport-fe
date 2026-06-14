@@ -1,12 +1,13 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { ArrowLeft, Download } from 'lucide-react'
+import { ArrowLeft, Download, Pencil, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import PortfolioPreview from '@/features/portfolio/components/PortfolioPreview'
 import { usePortfolioDetail } from '@/hooks/usePortfolioDetail'
+import { createShareLink } from '@/lib/api/portfolio'
 
 const PortfolioDetailPage = () => {
   const params = useParams<{ portfolioId: string }>()
@@ -14,6 +15,24 @@ const PortfolioDetailPage = () => {
   const { portfolio, isLoading, error } = usePortfolioDetail(portfolioId)
   const previewRef = useRef<HTMLDivElement>(null)
   const [isExporting, setIsExporting] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
+
+  function showToast(message: string) {
+    setToast(message)
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  async function handleShare() {
+    try {
+      const { shareToken } = await createShareLink(Number(portfolioId))
+      const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || window.location.origin
+      const shareUrl = `${frontendUrl}/portfolio/share/${shareToken}`
+      await navigator.clipboard.writeText(shareUrl)
+      showToast('링크가 복사되었습니다.')
+    } catch {
+      showToast('링크 복사에 실패했습니다.')
+    }
+  }
 
   const handleExportPdf = async () => {
     if (!previewRef.current) return
@@ -83,6 +102,12 @@ const PortfolioDetailPage = () => {
 
   return (
     <div className="flex w-full justify-center self-start px-6 py-10">
+      {toast && (
+        <div className="body-m fixed top-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-neutral-900 px-6 py-3 text-white shadow-lg">
+          {toast}
+        </div>
+      )}
+
       <div className="flex w-full max-w-4xl flex-col gap-6 self-start">
         <div className="flex items-center justify-between">
           <Button asChild variant="ghost" className="h-9 w-fit gap-2 rounded-lg px-2">
@@ -92,15 +117,32 @@ const PortfolioDetailPage = () => {
             </Link>
           </Button>
 
-          <Button
-            variant="outline"
-            className="h-9 gap-2 rounded-lg px-3"
-            onClick={handleExportPdf}
-            disabled={isExporting}
-          >
-            <Download size={16} />
-            {isExporting ? 'PDF 생성 중...' : 'PDF로 내보내기'}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="h-9 gap-2 rounded-lg px-3"
+              onClick={handleShare}
+              disabled={!portfolio.isPublic}
+            >
+              <Share2 size={16} />
+              공유
+            </Button>
+            <Button
+              variant="outline"
+              className="h-9 gap-2 rounded-lg px-3"
+              onClick={handleExportPdf}
+              disabled={isExporting}
+            >
+              <Download size={16} />
+              {isExporting ? 'PDF 생성 중...' : 'PDF로 내보내기'}
+            </Button>
+            <Button asChild variant="outline" className="h-9 gap-2 rounded-lg px-3">
+              <Link href={`/portfolio/${portfolioId}/edit`}>
+                <Pencil size={16} />
+                편집
+              </Link>
+            </Button>
+          </div>
         </div>
 
         <div ref={previewRef}>

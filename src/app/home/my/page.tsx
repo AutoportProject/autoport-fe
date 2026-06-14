@@ -1,12 +1,52 @@
 'use client'
 
-import { ArrowRight, FileText, FolderGit, Lock, Plus, UserRound } from 'lucide-react'
+import { ArrowRight, FileText, FolderGit, Lock, Plus, Trash2, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { usePortfolios } from '@/hooks/usePortfolios'
+import { useDeletePortfolio } from '@/hooks/usePortfolio'
+import { type PortfolioSummary, usePortfolios } from '@/hooks/usePortfolios'
 import { useUserMe } from '@/hooks/useUserMe'
 import { formatKoreanDate } from '@/lib/date'
+
+function DeleteModal({
+  portfolio,
+  onConfirm,
+  onCancel,
+  loading,
+}: {
+  portfolio: PortfolioSummary
+  onConfirm: () => void
+  onCancel: () => void
+  loading: boolean
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="mx-4 w-full max-w-sm rounded-2xl bg-white p-6">
+        <h3 className="body-sb mb-2 text-neutral-950">포트폴리오 삭제</h3>
+        <p className="body-m mb-6 text-neutral-500">
+          <span className="text-neutral-700">&ldquo;{portfolio.title}&rdquo;</span>을(를) 삭제할까요? 삭제 후에는 복구할 수 없습니다.
+        </p>
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={onCancel}
+            disabled={loading}
+            className="body-m rounded-xl bg-neutral-100 px-4 py-2 text-neutral-600 transition hover:bg-neutral-200 disabled:opacity-50"
+          >
+            취소
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className="body-m rounded-xl bg-red-500 px-4 py-2 text-white transition hover:bg-red-600 disabled:opacity-50"
+          >
+            {loading ? '삭제 중...' : '삭제'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const MyPage = () => {
   const { user } = useUserMe()
@@ -18,7 +58,10 @@ const MyPage = () => {
     isLoading,
     error,
     setPage,
+    refetch,
   } = usePortfolios()
+  const { remove, loading: deleting } = useDeletePortfolio()
+  const [deleteTarget, setDeleteTarget] = useState<PortfolioSummary | null>(null)
 
   const latestUpdatedAt = useMemo(() => {
     const dates = portfolios
@@ -29,6 +72,18 @@ const MyPage = () => {
 
     return new Date(Math.max(...dates)).toISOString()
   }, [portfolios])
+
+  async function handleDelete() {
+    if (!deleteTarget) return
+
+    try {
+      await remove(Number(deleteTarget.portfolioId))
+      setDeleteTarget(null)
+      refetch()
+    } catch {
+      setDeleteTarget(null)
+    }
+  }
 
   return (
     <div className="flex w-full flex-col items-center self-start px-6 py-10">
@@ -141,12 +196,14 @@ const MyPage = () => {
           ) : (
             <div className="grid gap-3 md:grid-cols-2">
               {portfolios.map((portfolio) => (
-                <Link
+                <div
                   key={String(portfolio.portfolioId)}
-                  href={`/home/my/portfolios/${portfolio.portfolioId}`}
                   className="group flex min-h-44 flex-col justify-between rounded-lg border border-neutral-200 bg-white p-5 transition-all hover:border-neutral-400 hover:bg-neutral-50"
                 >
-                  <div className="flex flex-col gap-3">
+                  <Link
+                    href={`/home/my/portfolios/${portfolio.portfolioId}`}
+                    className="flex flex-col gap-3"
+                  >
                     <div className="flex items-center justify-between gap-3">
                       <span className="caption-m-sm text-neutral-400">
                         Template {portfolio.templateId}
@@ -167,24 +224,38 @@ const MyPage = () => {
                     </div>
                     <div>
                       <h3 className="body-sb line-clamp-2 text-neutral-950">
-                        {portfolio.title}
+                        {portfolio.featuredProjectName ?? portfolio.title}
                       </h3>
                       <p className="body-m mt-2 line-clamp-3 whitespace-pre-line text-neutral-500">
                         {portfolio.summary || portfolio.description || '프로젝트 요약이 아직 없어요.'}
                       </p>
                     </div>
-                  </div>
+                  </Link>
 
                   <div className="mt-5 flex items-center justify-between gap-3">
                     <span className="caption-m-sm text-neutral-400">
                       {formatKoreanDate(portfolio.updatedAt)}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-sm font-semibold text-neutral-700 transition-transform group-hover:translate-x-1">
-                      상세보기
-                      <ArrowRight size={15} />
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        className="h-8 gap-1 rounded-lg border-red-100 px-2 text-red-500 hover:bg-red-50"
+                        onClick={() => setDeleteTarget(portfolio)}
+                        disabled={deleting}
+                      >
+                        <Trash2 size={14} />
+                        삭제
+                      </Button>
+                      <Link
+                        href={`/home/my/portfolios/${portfolio.portfolioId}`}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-neutral-700 transition-transform group-hover:translate-x-1"
+                      >
+                        상세보기
+                        <ArrowRight size={15} />
+                      </Link>
+                    </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}
@@ -214,6 +285,15 @@ const MyPage = () => {
           )}
         </section>
       </div>
+
+      {deleteTarget && (
+        <DeleteModal
+          portfolio={deleteTarget}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+          loading={deleting}
+        />
+      )}
     </div>
   )
 }

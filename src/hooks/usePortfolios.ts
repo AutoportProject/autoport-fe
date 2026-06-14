@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import axiosInstance from '@/lib/api/axios'
 
@@ -69,6 +69,36 @@ export const usePortfolios = () => {
     fetchPortfolios()
   }, [page])
 
+  const refetch = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { data } = await axiosInstance.get<PortfolioListResponse>('/api/portfolio', {
+        params: {
+          page,
+          perPage: 6,
+          sort: 'createdAt',
+          direction: 'desc',
+        },
+      })
+
+      setPortfolios(data.data.content)
+      setTotalPages(data.data.totalPages)
+      setTotalElements(data.data.totalElements)
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status
+        if (status === 400) setError('인증이 만료되었어요. 다시 로그인해 주세요.')
+        else setError('포트폴리오 목록을 불러오지 못했어요.')
+      } else {
+        setError('알 수 없는 오류가 발생했어요.')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [page])
+
   return {
     portfolios,
     page,
@@ -77,5 +107,6 @@ export const usePortfolios = () => {
     isLoading,
     error,
     setPage,
+    refetch,
   }
 }
